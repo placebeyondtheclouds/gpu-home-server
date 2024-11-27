@@ -5,10 +5,13 @@
 - running inference on models that require 24GB of VRAM
   - hosting ollama with open webui
 - running training/inference code that requires CUDA v.11-12, needs Pascal architecture GPU
+- hashcat
 
 ## hardware
 
 - **NVIDIA TESLA P40**, PCIe 3.0 x16, TDP 250 W - 1649 元 **used**
+- 2x PCIe 8pin to 1x **EPS 8pin adapter** - 15 元
+  - might be an overkill as I could just use the spare 8pin CPU power cable from the PSU, but better make use of the two PCIe power cables
 - custom made **240mm water cooler** for GPU - 459 元
   - it's basically a CPU water cooler with a custom plate for the GPU core. I might have paid 300 元 for a small piece of copper hahahahahaha.
 - thermal grease **Thermalright TF7** 2g tube, two tubes - 22 元
@@ -37,7 +40,15 @@
   - NAT, firewall, OpenVPN
 - Debian, LXC for websites
   - docker
+    - ollama
+    - open-webui
 - Debian, LXC for training
+  - conda, jupyter lab
+- Debian, LXC for local tools
+  - docker
+    - hashcat
+    - jellyfin
+    - nextcloud
 
 ## hardware setup pictures
 
@@ -54,3 +65,4 @@
 ## references
 
 - https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
+- https://www.playtool.com/pages/psuconnectors/connectors.html

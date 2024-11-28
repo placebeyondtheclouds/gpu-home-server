@@ -5,7 +5,6 @@
 - running inference on models that require 24GB of VRAM
   - hosting ollama with open webui
 - running training/inference code that requires CUDA v.11-12, needs Pascal architecture GPU
-- hashcat
 
 ## hardware
 
@@ -39,16 +38,22 @@
   - sensei/suricata
   - NAT, firewall, OpenVPN
 - Debian, LXC for websites
-  - docker
+  - docker stack: https://github.com/placebeyondtheclouds/gpu-webserver-docker-stack
     - ollama
     - open-webui
 - Debian, LXC for training
   - conda, jupyter lab
-- Debian, LXC for local tools
+- Debian, LXC for home network tools
   - docker
     - hashcat
     - jellyfin
     - nextcloud
+
+## principles
+
+- only sone websites are exposed to the internet through a reverse proxy plus waf plus cloudflare public dns with basic protections
+- all other services are accessed through VPN
+- gpu is shared between LXCs
 
 ## hardware setup pictures
 

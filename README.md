@@ -11,9 +11,9 @@
 - **NVIDIA TESLA P40**, PCIe 3.0 x16, TDP 250 W - 1649 元 **used**
 - 2x PCIe 8pin to 1x **EPS 8pin adapter** - 15 元
   - might be an overkill as I could just use the spare 8pin CPU power cable from the PSU, but better make use of the two PCIe power cables
-- custom made **240mm water cooler** for GPU - 459 元
+- custom made **长城战龙 240mm ARGB**-based water cooler solution for GPU - 459 元
   - it's basically a CPU water cooler with a custom plate for the GPU core. I might have paid 300 元 for a small piece of copper hahahahahaha.
-- thermal grease **Thermalright TF7** 2g tube, two tubes - 22 元
+- thermal compound **Thermalright TF7**, 12.8 W/m-k, 2g tube, four tubes - 40 元
 - **鱼巢 S9** mATX case 21L, support for 240mm water cooler (GPU) plus 120mm water cooler (CPU) - 134 元
 - **鑫谷 GM650W** PSU, 650W 80plus(gold label rating) - 352 元
 - **精粤 X99M GAMING D4** motherboard, X99 chipset, DDR4, LGA2011-3, one PCIe 3.0 x16, NVMe - 275 元

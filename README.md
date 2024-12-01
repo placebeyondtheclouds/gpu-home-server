@@ -16,7 +16,7 @@
 - thermal compound **Thermalright TF7**, 12.8 W/m-k, 2g tube, four tubes - 40 元
 - **鱼巢 S9** mATX case 21L, support for 240mm water cooler (GPU) plus 120mm water cooler (CPU) - 134 元
 - **鑫谷 GM650W** PSU, 650W 80plus(gold label rating) - 352 元
-- **精粤 X99M GAMING D4** motherboard, X99 chipset, DDR4, LGA2011-3, one PCIe 3.0 x16, NVMe - 275 元
+- **精粤 X99M GAMING D4 ARGB** motherboard, X99 chipset, DDR4, LGA2011-3, one PCIe 3.0 x16, NVMe - 286 元
   - CPU: 40 PCIe gen3 lanes
   - Chipset: 8 PCIe gen2 lanes
 - **冰曼 KS120 white ARGB** 120mm CPU water cooler - 116 元
@@ -25,25 +25,27 @@
 - **NVMe SSD 500GB**, left from laptop storage upgrade
 - NVME SSD **heatsink**, bought before
 - dual 5dbi antenna **wifi dongle** on Realtek rtl8812bu chip, wifi5 usb3.0, bought before
-  - supported in-kernel since Linux kernel 6.2 (2023) but kernel 6.12 (2024) is recommended due to stability and performance enhancements
-- Dell NVIDIA GT730 GPU, PCIe gen2 x1 - 120 元 **used**
+  - supported in-kernel since Linux kernel 6.2 (2023), PMVE 8.3 has kernel 6.8
+- Dell **NVIDIA GT730 GPU**, PCIe gen2 x1 - 133 元 **used**
+- **GPU standoff** bracket - 15 元
+
+Total cost: 3588 元 = 560 USD
 
 ## software
 
-- Proxmox VE 8.2
-  - GPU passthrough
+- Proxmox VE 8.3
   - NVIDIA drivers
   - NVIDIA container toolkit
 - OPNsense, VM
   - sensei/suricata
   - NAT, firewall, OpenVPN
-- Debian, LXC for websites
+- Debian 12, LXC for websites
   - docker stack: https://github.com/placebeyondtheclouds/gpu-webserver-docker-stack
     - ollama
     - open-webui
-- Debian, LXC for training
+- Debian 12, LXC for training
   - conda, jupyter lab
-- Debian, LXC for home network tools
+- Debian 12, LXC for home network tools
   - docker
     - hashcat
     - jellyfin
@@ -56,6 +58,14 @@
 - gpu is shared between LXCs
 
 ## hardware setup pictures
+
+## hardware setup process
+
+- assemble minimal setup with CPU, RAM, the small GPU, PSU, motherboard, and case
+
+- check BIOS version, reflash from the official website
+
+- install ubuntu (faster), nvidia drivers and test the P40
 
 ## software setup process
 
@@ -81,3 +91,4 @@
 - https://www.techpowerup.com/gpu-specs/tesla-p40.c2878
 - https://www.bilibili.com/video/BV1gz4y187VR/
 - https://www.bilibili.com/video/BV1co4y1H7KJ
+- https://itgpt.net/note-book/%E6%B4%8B%E5%9E%83%E5%9C%BE%E4%B8%BB%E6%9C%BA/CPU%E9%B8%A1%E8%A1%80BIOS

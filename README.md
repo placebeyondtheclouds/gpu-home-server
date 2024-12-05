@@ -29,7 +29,7 @@
 - **Samsung 32GB DDR4 2400T ECC REG dual rank x4** memory, two modules - 344 元 **used**
 - **NVMe SSD 500GB**, left from laptop storage upgrade
 - NVME SSD **heatsink**, bought before
-- dual 5dbi antenna **wifi dongle** on Realtek rtl8812bu chip, wifi5 usb3.0, bought before
+- **wifi dongle** on Mediatek mt7612u wifi5 usb2, bought before
   - supported in-kernel since Linux kernel 6.2 (2023), PMVE 8.3 has kernel 6.8
 - Dell **NVIDIA GT730 GPU**, PCIe gen2 x1 - 133 元 **used**
 - **GPU standoff** bracket - 15 元
@@ -41,6 +41,8 @@ Total cost: 3588 元 = 560 USD
 - Proxmox VE 8.3
   - NVIDIA drivers
   - NVIDIA container toolkit
+- OpenWRT, VM
+  - WiFi client
 - OPNsense, VM
   - sensei/suricata
   - NAT, firewall, OpenVPN
@@ -73,6 +75,8 @@ Total cost: 3588 元 = 560 USD
 ## hardware setup process
 
 - assemble minimal setup with CPU, RAM, the small GPU, PSU, motherboard and get it to POST
+
+- there are no rules for populating memory banks because there are 4 slots and 4 channels
 
 - boot Ubuntu Live cd and check if the P40 is recognized
 
@@ -197,7 +201,7 @@ must lock to a certain driver version on the host and in the LXC.
 apt install pve-headers-$(uname -r)
 curl -fSsL https://developer.download.nvidia.com/compute/cuda/repos/debian12/x86_64/3bf863cc.pub | gpg --dearmor | tee /usr/share/keyrings/nvidia-drivers.gpg > /dev/null 2>&1
 apt update
-apt install dirmngr ca-certificates software-properties-common apt-transport-https dkms curl -y
+apt install dirmngr ca-certificates software-properties-common apt-transport-https dkms -y
 echo 'deb [signed-by=/usr/share/keyrings/nvidia-drivers.gpg] https://developer.download.nvidia.com/compute/cuda/repos/debian12/x86_64/ /' | tee /etc/apt/sources.list.d/nvidia-drivers.list
 apt update
 apt install cuda-drivers-565 nvtop -y
@@ -217,6 +221,19 @@ reboot
 ```
 
 - make it reflect system load
+
+### openwrt VM
+
+- `wget https://downloads.openwrt.org/releases/23.05.5/targets/x86/64/openwrt-23.05.5-x86-64-generic-ext4-combined.img.gz`
+- `gunzip openwrt-*.img.gz`
+- `qemu-img resize -f raw openwrt-*.img 8G`
+- create new VM (no drives, SeaBIOS)
+- `qm importdisk 103 openwrt-23.05.5-x86-64-generic-ext4-combined.img local-lvm`
+- set the disk to VirtIO block, discard=enabled, add
+- change boot order
+- add usb wifi dongle
+
+user `root`, password is blank
 
 ### OPNsense VM
 
@@ -274,7 +291,11 @@ EOF
 apt update && apt upgrade -y
 ```
 
-- install NVIDIA drivers, same commands as for the host
+- `apt install linux-headers-amd64 -y`
+
+- `apt install screen curl gpg -y`
+
+- install NVIDIA drivers, same commands as for the host minus the `pve-headers-$(uname -r)` package
 
 - install nvidia-container-toolkit
 
@@ -310,3 +331,4 @@ sudo nvidia-ctk runtime configure --runtime=docker
 - https://itgpt.net/note-book/%E6%B4%8B%E5%9E%83%E5%9C%BE%E4%B8%BB%E6%9C%BA/CPU%E9%B8%A1%E8%A1%80BIOS
 - https://www.servethehome.com/intel-xeon-e5-2600-v4-broadwell-ep-launched/intel-xeon-e5-2600-v4-family-comparison/
 - https://pmcvtm.com/adding-openrgb-to-proxmox
+- https://gist.github.com/subrezon/b9aa2014343f934fbf69e579ecfc8da8

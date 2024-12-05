@@ -6,6 +6,11 @@
   - hosting ollama with open webui
 - running training/inference code that requires CUDA v.11-12, needs Pascal architecture GPU
 
+## to do
+
+- [] mitigate https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-3646
+- [] reflash the BIOS with coreboot to remove the possibility of bootkits
+
 ## hardware
 
 - **NVIDIA TESLA P40**, PCIe 3.0 x16, TDP 250 W - 1649 元 **used**
@@ -203,6 +208,16 @@ reboot
 - `lspci -nnk | grep -i nvidia`
   - should see `Kernel driver in use: nvidia`
 
+#### ARGB
+
+- install https://github.com/CalcProgrammer1/OpenRGB as a daemon
+
+```bash
+
+```
+
+- make it reflect system load
+
 ### OPNsense VM
 
 - https://opnsense.org/download/
@@ -294,7 +309,4 @@ sudo nvidia-ctk runtime configure --runtime=docker
 - https://www.bilibili.com/video/BV1co4y1H7KJ
 - https://itgpt.net/note-book/%E6%B4%8B%E5%9E%83%E5%9C%BE%E4%B8%BB%E6%9C%BA/CPU%E9%B8%A1%E8%A1%80BIOS
 - https://www.servethehome.com/intel-xeon-e5-2600-v4-broadwell-ep-launched/intel-xeon-e5-2600-v4-family-comparison/
-
-```
-
-```
+- https://pmcvtm.com/adding-openrgb-to-proxmox

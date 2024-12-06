@@ -368,7 +368,7 @@ sudo usermod -aG docker $USER
 
 ## Conclusion
 
-- should have chosen a less power hungry CPU, there is no need in a CPU this powerful
+- should have chosen a less power hungry CPU (E5-2650v4 or something that is still running memory at 2400), there is no need in a CPU this powerful
 - will have to use a NGFF wifi card with PCIe passthrough
 - P40 is not very power efficient at idle when the VRAM is loaded
 
@@ -392,6 +392,7 @@ sudo usermod -aG docker $USER
 - https://www.bilibili.com/video/BV1co4y1H7KJ
 - https://itgpt.net/note-book/%E6%B4%8B%E5%9E%83%E5%9C%BE%E4%B8%BB%E6%9C%BA/CPU%E9%B8%A1%E8%A1%80BIOS
 - https://www.servethehome.com/intel-xeon-e5-2600-v4-broadwell-ep-launched/intel-xeon-e5-2600-v4-family-comparison/
+- https://www.reddit.com/r/homelab/comments/lli4mg/intel_e5_2600_v4_series_comparison/
 - https://pmcvtm.com/adding-openrgb-to-proxmox
 - https://gist.github.com/subrezon/b9aa2014343f934fbf69e579ecfc8da8
 - https://digitalspaceport.com/proxmox-multi-gpu-passthru-for-lxc-and-docker-ai-homelab-server/

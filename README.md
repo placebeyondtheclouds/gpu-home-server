@@ -10,6 +10,7 @@
 
 - [] mitigate https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-3646
 - [] reflash the BIOS with coreboot to remove the possibility of bootkits
+- [] ARGB daemon
 
 ## hardware
 
@@ -216,9 +217,7 @@ reboot
 
 ```
 
-- make it reflect system load
-
-### openwrt VM
+### openwrt x86 VM
 
 - `wget https://downloads.openwrt.org/releases/23.05.5/targets/x86/64/openwrt-23.05.5-x86-64-generic-ext4-combined.img.gz`
 - `gunzip openwrt-*.img.gz`
@@ -231,7 +230,7 @@ reboot
 
 boot. ssh into it, user `root`, password is blank.
 
-add eth nic to connect to the internet temporarily, configure opkg -> replace `downloads` with `mirror-03.infra` in every feed link, install packages for the usb wifi dongle chip and `wpa-supplicant-openssl` (for WPA3), reboot connect to the wifi
+add eth nic to connect to the internet temporarily, configure opkg feed links, install packages for the usb wifi dongle chip and `wpa-supplicant-openssl` (for WPA3), reboot connect to the wifi
 
 continue expanding root filesystem
 
@@ -258,7 +257,7 @@ continue expanding root filesystem
 
 user `installer`, password `opnsense`
 
-### all LXCs
+### common setup for all LXCs
 
 - download Debian-12 template and create unprivileged LXC with Debian 12
 

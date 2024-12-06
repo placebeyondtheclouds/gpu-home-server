@@ -230,7 +230,7 @@ reboot
 
 boot. ssh into it, user `root`, password is blank.
 
-add eth nic to connect to the internet temporarily, configure opkg feed links, install packages for the usb wifi dongle chip and `wpa-supplicant-openssl` (for WPA3), reboot connect to the wifi
+add eth nic to connect to the internet temporarily, configure opkg feed links to the servers(mirror-03.infra.openwrt.org or downloads.openwrt.org or thatever that is working), install packages for the usb wifi dongle chip and `wpa-supplicant-openssl` (for WPA3), reboot connect to the wifi
 
 continue expanding root filesystem
 
@@ -363,7 +363,14 @@ sudo usermod -aG docker $USER
 ## Results
 
 - noise around 38dB at 1 meter ![screenshot](./images/2022-03-06_15-00-00.png)
-- idle at 64W
+- idle at 64W, 120W with GPU VRAM loaded and idle, 250W with GPU under load
+- usb dongles on `rtl8812bu` and `mt7921au` didn't work with OpenWRT, `mt7612u` was working but very unstable.
+
+## Conclusion
+
+- should have chosen a less power hungry CPU, there is no need in a CPU this powerful
+- will have to use a NGFF wifi card with PCIe passthrough
+- P40 is not very power efficient at idle when the VRAM is loaded
 
 ## 感谢
 

@@ -14,25 +14,23 @@
 ## hardware
 
 - **NVIDIA TESLA P40**, PCIe 3.0 x16, TDP 250 W - 1649 元 **used**
-- 2x PCIe 8pin to 1x **EPS 8pin adapter** 18 AWG - was included with the GPU
+- 2x PCIe 8pin to 1x **EPS 8pin adapter** 18AWG - was included with the GPU
   - might be an overkill as I could just use the spare 8pin CPU power cable from the PSU, but better make use of the two PCIe power cables
 - custom made **长城战龙 240mm ARGB**-based water cooler solution for GPU - 459 元
   - it's basically a CPU water cooler with a custom plate for the GPU core plus a set custom cut thermal pads.
-- thermal compound **Thermalright TF7**, 12.8 W/m-k, 2g tube, four tubes - 40 元
+- thermal compound **Thermalright TF7**, 12.8 W/m-k, 2g tube, two tubes - 20 元
 - **鱼巢 S9** mATX case 21L, support for 240mm water cooler (GPU) plus 120mm water cooler (CPU) - 134 元
 - **鑫谷 GM650W** PSU, 650W 80plus(gold label rating) - 352 元
 - **精粤 X99M GAMING D4 ARGB** motherboard, X99 chipset, DDR4, LGA2011-3, one PCIe 3.0 x16, NVMe - 286 元
-  - CPU: 40 PCIe gen3 lanes
-  - Chipset: 8 PCIe gen2 lanes
+  - CPU: 40 PCIe gen3 lanes, Chipset: 8 PCIe gen2 lanes
 - **冰曼 KS120 white ARGB** 120mm CPU water cooler - 116 元
 - **Intel Xeon E5-2697v4** CPU, 18 cores 36 threads, 2.3GHz base, 3.6GHz turbo, 145W TDP - 215 元 **used**
 - **Samsung 32GB DDR4 2400T ECC REG dual rank x4** memory, two modules - 344 元 **used**
-- gen4 x4 **NVMe SSD 500GB**, left from laptop storage upgrade
-- **wifi dongle**, bought before
+- **NVMe SSD 500GB** gen4 x4, left from laptop storage upgrade
+- ~~**wifi dongle** Realtek rtl8812bu wifi5 usb3, bought before~~
 - Dell **NVIDIA GT730 GPU**, PCIe gen2 x1 - 133 元 **used**
-- **GPU standoff** bracket - 15 元
 
-Total cost: 3588 元 = 560 USD
+Total cost: 3700 元
 
 ## software
 

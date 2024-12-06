@@ -27,10 +27,8 @@
 - **冰曼 KS120 white ARGB** 120mm CPU water cooler - 116 元
 - **Intel Xeon E5-2697v4** CPU, 18 cores 36 threads, 2.3GHz base, 3.6GHz turbo, 145W TDP - 215 元 **used**
 - **Samsung 32GB DDR4 2400T ECC REG dual rank x4** memory, two modules - 344 元 **used**
-- **NVMe SSD 500GB**, left from laptop storage upgrade
-- NVME SSD **heatsink**, bought before
-- **wifi dongle** on Mediatek mt7612u wifi5 usb2, bought before
-  - supported in-kernel since Linux kernel 6.2 (2023), PMVE 8.3 has kernel 6.8
+- gen4 x4 **NVMe SSD 500GB**, left from laptop storage upgrade
+- **wifi dongle**, bought before
 - Dell **NVIDIA GT730 GPU**, PCIe gen2 x1 - 133 元 **used**
 - **GPU standoff** bracket - 15 元
 
@@ -90,7 +88,7 @@ Total cost: 3588 元 = 560 USD
 
   - PCI subsystem settings ->
     - Enable above 4G decoding (otherwise will be faced with `Insufficient PCI resources detected`)
-    - Enable Re-Size BAR Support
+    - Enable Re-Size BAR Support [explainer](https://www.reddit.com/r/pcmasterrace/comments/1b4sy75/comment/kt24k82/)
     - Enable SR-IOV Support
     - MMIOHBase set to 2T
   - CSM configuration -> UEFI only
@@ -233,7 +231,28 @@ reboot
 - change boot order
 - add usb wifi dongle
 
-user `root`, password is blank
+boot. ssh into it, user `root`, password is blank.
+
+add eth nic to connect to the internet temporarily, configure opkg -> replace `downloads` with `mirror-03.infra` in every feed link, install packages for the usb wifi dongle chip and `wpa-supplicant-openssl` (for WPA3), reboot connect to the wifi
+
+continue expanding root filesystem
+
+- `opkg update && opkg install lsblk fdisk losetup resize2fs`
+- `lsblk -o PATH,SIZE,PARTUUID`
+- `lsblk -o PATH,SIZE,PARTUUID > /root/lsblk_old.txt`
+- `cat /boot/grub/grub.cfg`
+- `fdisk /dev/sda` -> `p` -> `d` -> `2` -> `n` -> `p` -> `2` -> 33792 enter -> `enter` -> `n` -> `w`
+- ```
+  BOOT="$(sed -n -e "/\s\/boot\s.*$/{s///p;q}" /etc/mtab)"
+  DISK="${BOOT%%[0-9]*}"
+  PART="$((${BOOT##*[^0-9]}+1))"
+  ROOT="${DISK}${PART}"
+  LOOP="$(losetup -f)"
+  losetup ${LOOP} ${ROOT}
+  fsck.ext4 -y -f ${LOOP}
+  resize2fs ${LOOP}
+  reboot
+  ```
 
 ### OPNsense VM
 
@@ -263,6 +282,8 @@ lxc.mount.entry: /dev/nvram dev/nvram none bind,optional,create=file
 ```
 
 - start the LXC
+
+- add user `admin` with sudo rights: `adduser admin && usermod -aG sudo admin`
 
 - `dpkg-reconfigure locales` and set en_US.UTF-8 as default
 
@@ -304,15 +325,52 @@ apt install nvidia-container-toolkit
 sudo nvidia-ctk runtime configure --runtime=docker
 ```
 
+- `sed -i 's/#no-cgroups = false/no-cgroups = true/' /etc/nvidia-container-runtime/config.toml`
+
+- check with `nvidia-container-cli -k -d /dev/tty info`
+
+- `logout`
+
 #### Debian LXC for websites
 
 - install docker engine
+
+```
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+sudo usermod -aG docker $USER
+```
+
+- test with `docker info | grep -i runtime` and `docker run --rm --runtime=nvidia --gpus all ubuntu nvidia-smi`
+
+- add ssh key and deploy my `GPU webserver docker stack` using DOCKER_HOST
 
 #### Debian LXC for training
 
 ## Docker security
 
 - https://github.com/wsargent/docker-cheat-sheet?tab=readme-ov-file#security
+
+## Results
+
+- noise around 38dB at 1 meter ![screenshot](./images/2022-03-06_15-00-00.png)
+- idle at 64W
+
+## 感谢
+
+感谢可可给我借一个很好用的键盘
 
 ## references
 
@@ -332,3 +390,5 @@ sudo nvidia-ctk runtime configure --runtime=docker
 - https://www.servethehome.com/intel-xeon-e5-2600-v4-broadwell-ep-launched/intel-xeon-e5-2600-v4-family-comparison/
 - https://pmcvtm.com/adding-openrgb-to-proxmox
 - https://gist.github.com/subrezon/b9aa2014343f934fbf69e579ecfc8da8
+- https://digitalspaceport.com/proxmox-multi-gpu-passthru-for-lxc-and-docker-ai-homelab-server/
+- https://forum.openwrt.org/t/howto-resizing-root-partition-on-x86/140631

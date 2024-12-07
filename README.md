@@ -127,7 +127,7 @@ Total cost: 3700 元
 
 - assemble minimal setup with CPU, RAM, the small GPU, PSU, motherboard and get it to POST
 
-- there are no rules for populating memory banks because there are 4 slots and 4 channels
+- there are no rules for populating memory banks because there are 4 slots and 4 channels (because Xeon E5 has 4 memory channels)
 
 - boot Ubuntu Live cd and check if the P40 is recognized
 
@@ -201,13 +201,13 @@ Total cost: 3700 元
 
 - `echo "options vfio_iommu_type1 allow_unsafe_interrupts=1" > /etc/modprobe.d/iommu_unsafe_interrupts.conf`
 
-- `update-initramfs -u && update-grub`
+- `update-initramfs -u && update-grub && reboot`
 
 - `dmesg | grep -e DMAR -e IOMMU`
 
   - should see `DMAR: Intel(R) Virtualization Technology for Directed I/O`
 
-#### set up updates
+#### set up updates (my closest mirrors are in China)
 
 ```bash
 tee /etc/apt/sources.list <<-'EOF'

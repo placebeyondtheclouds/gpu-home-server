@@ -5,6 +5,8 @@
 - running inference on models that require 24GB of VRAM
   - hosting ollama with open webui
 - running training/inference code that requires CUDA v.11-12, needs Pascal architecture GPU
+- render videos on CPU and GPU
+- data engineering tasks
 
 ## to do
 
@@ -138,7 +140,7 @@ Total cost: 3700 元
 
 - boot Proxmox VE 8.3 live cd, hit `e` and add `nomodeset` to the kernel command line, `ctrl` + `x` to boot (because GT830 is too old for the drivers in proxmox)
 
-#### set up GPU
+#### set up virtualization (IOMMU and VFIO), blacklist default drivers
 
 - `nano /etc/default/grub`
 
@@ -223,6 +225,15 @@ EOF
 
 `sensors-detect --auto`
 
+#### tune power consumption
+
+- `apt install powertop && powertop --auto-tune`
+
+#### test CPU stability
+
+- `apt install stress s-tui`
+- `stress --cpu 38 --timeout 60`
+
 #### install NVIDIA drivers
 
 `nvidia-smi` binary has been moved to `nvidia-cuda-driver` package (https://forums.developer.nvidia.com/t/nvidia-smi-missing-for-565-drivers-debian-12-packages/311702/5)
@@ -243,6 +254,7 @@ reboot
 
 - `lspci -nnk | grep -i nvidia`
   - should see `Kernel driver in use: nvidia`
+- `nvidia-smi -i 0 -q`
 
 #### ARGB
 
@@ -405,9 +417,10 @@ sudo usermod -aG docker $USER
 
 ## Conclusion
 
-- should have chosen a less power hungry CPU (like E5-2650v4 or something that is still running the memory at 2400), there is no need in a CPU this powerful
+- should have chosen a less power hungry CPU (like E5-2650v4 or something that is still running the memory at 2400MT/s), there is no need in a CPU this powerful
 - will have to use a NGFF wifi card with PCIe passthrough
 - P40 is not very power efficient at idle when the VRAM is loaded
+- the motherboard has PCIe gen3, so any newer GPU will work but data transfer speeds will be limited to gen3
 
 ## 感谢
 
@@ -434,3 +447,4 @@ sudo usermod -aG docker $USER
 - https://gist.github.com/subrezon/b9aa2014343f934fbf69e579ecfc8da8
 - https://digitalspaceport.com/proxmox-multi-gpu-passthru-for-lxc-and-docker-ai-homelab-server/
 - https://forum.openwrt.org/t/howto-resizing-root-partition-on-x86/140631
+- https://docs.nvidia.com/deploy/driver-persistence/index.html

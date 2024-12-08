@@ -428,7 +428,9 @@ the usual setup with miniconda, jupyter lab, etc.
 
 #### Debian LXC for home network services
 
-work in progress
+clone an LXC with docker, down the existing stack, prune images, deploy the new stack
+
+`work in progress`
 
 #### Debian LXC video rendering on CPU
 

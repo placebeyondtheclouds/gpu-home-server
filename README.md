@@ -11,6 +11,10 @@ These are my notes. They are minimal instructions for the process that I usually
 - rendering videos on CPU and GPU
 - data engineering tasks
 
+## my video about the build
+
+[![Minimalistic homelab GPU server for Proxmox and Docker - 2024-12-7](https://img.youtube.com/vi/dfDnEBk9l6s/0.jpg)](https://www.youtube.com/watch?v=dfDnEBk9l6s "Minimalistic homelab GPU server for Proxmox and Docker - 2024-12-7")
+
 ## to do
 
 - [ ] mitigate https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-3646

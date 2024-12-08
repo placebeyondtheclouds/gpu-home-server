@@ -127,7 +127,7 @@ Total cost: 3700 元
 
 - assemble minimal setup with CPU, RAM, the small GPU, PSU, motherboard and get it to POST
 
-- there are no rules for populating memory banks because there are 4 slots and 4 channels (because Xeon E5 has 4 memory channels)
+- there are no rules for populating memory banks, the motherboard has 1 slot per channel (Xeon E5 has 4 memory channels)
 
 - boot Ubuntu Live cd and check if the P40 is recognized
 
@@ -155,7 +155,7 @@ Total cost: 3700 元
 
 ### hypervisor
 
-- boot Proxmox VE 8.3 live cd, hit `e` and add `nomodeset` to the kernel command line, `ctrl` + `x` to boot (because GT830 is too old for the drivers in proxmox)
+- boot Proxmox VE 8.3 live cd, hit `e` and add `nomodeset` to the kernel command line, `ctrl` + `x` to boot (because GT730 is too old for the drivers in proxmox)
 
 #### set up virtualization (IOMMU and VFIO), blacklist default drivers
 

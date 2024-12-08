@@ -1,5 +1,7 @@
 # GPU home server
 
+These are my notes. They are minimal instructions for the process that I usually follow to get a server up and running and must be adjusted according to the actual needs.
+
 ## use cases
 
 - running inference on models that require 24GB of VRAM
@@ -340,7 +342,7 @@ lxc.mount.entry: /dev/nvram dev/nvram none bind,optional,create=file
 
 - start the LXC
 
-- add user `admin` with sudo rights: `adduser admin && usermod -aG sudo admin`
+- add local admin: `adduser admin && usermod -aG sudo admin`
 
 - `dpkg-reconfigure locales` and set en_US.UTF-8 as default
 

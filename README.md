@@ -331,6 +331,9 @@ continue expanding root filesystem
 
 user `installer`, password `opnsense`
 
+> [!WARNING]
+> work in progress
+
 ### common setup for all LXCs
 
 - download Debian-12 template and create unprivileged LXC with Debian 12

@@ -426,6 +426,14 @@ sudo usermod -aG docker $USER
 
 the usual setup with miniconda, jupyter lab, etc.
 
+#### Debian LXC for home network services
+
+work in progress
+
+#### Debian LXC video rendering on CPU
+
+- https://www.edoardomarascalchi.it/2024/01/how-to-render-a-kdenlive-project-on-a-different-computer/
+
 ## Docker security
 
 - https://github.com/wsargent/docker-cheat-sheet?tab=readme-ov-file#security

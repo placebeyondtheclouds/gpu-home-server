@@ -207,7 +207,7 @@ Total cost: 3700 元
 
   - should see `DMAR: Intel(R) Virtualization Technology for Directed I/O`
 
-#### set up updates (my closest mirrors are in China)
+#### set up updates (my closest mirrors in China)
 
 ```bash
 tee /etc/apt/sources.list <<-'EOF'
@@ -299,7 +299,7 @@ continue expanding root filesystem
 - `lsblk -o PATH,SIZE,PARTUUID > /root/lsblk_old.txt`
 - `cat /boot/grub/grub.cfg`
 - `fdisk /dev/sda` -> `p` -> `d` -> `2` -> `n` -> `p` -> `2` -> 33792 enter -> `enter` -> `n` -> `w`
-- ```
+- ```shell
   BOOT="$(sed -n -e "/\s\/boot\s.*$/{s///p;q}" /etc/mtab)"
   DISK="${BOOT%%[0-9]*}"
   PART="$((${BOOT##*[^0-9]}+1))"
@@ -346,7 +346,7 @@ lxc.mount.entry: /dev/nvram dev/nvram none bind,optional,create=file
 
 - `timedatectl set-timezone Asia/Shanghai`
 
-- set up updates
+- set up updates (again, my closest mirrors in China)
 
 ```bash
 tee /etc/apt/sources.list <<-'EOF'
@@ -416,7 +416,7 @@ sudo usermod -aG docker $USER
 
 #### Debian LXC for training
 
-the usual setup with conda, jupyter lab, etc.
+the usual setup with miniconda, jupyter lab, etc.
 
 ## Docker security
 

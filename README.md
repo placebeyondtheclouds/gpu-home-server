@@ -4,6 +4,7 @@ These are my notes. They are minimal instructions for the process that I usually
 
 ## use cases
 
+- running homelab VMs
 - running inference on models that require 24GB of VRAM
   - hosting ollama with open webui
 - running training/inference code that requires CUDA v.11-12, needs Pascal architecture GPU

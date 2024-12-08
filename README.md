@@ -288,7 +288,8 @@ reboot
 
 #### ARGB
 
-to do
+> [!WARNING]
+> work in progress
 
 ### openwrt x86 VM
 
@@ -435,7 +436,14 @@ the usual setup with miniconda, jupyter lab, etc.
 
 clone an LXC with docker, down the existing stack, prune images, deploy the new stack
 
-`work in progress`
+```bash
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+docker system prune -a
+```
+
+> [!WARNING]
+> work in progress
 
 #### Debian LXC video rendering on CPU
 

@@ -5,15 +5,15 @@
 - running inference on models that require 24GB of VRAM
   - hosting ollama with open webui
 - running training/inference code that requires CUDA v.11-12, needs Pascal architecture GPU
-- render videos on CPU and GPU
+- rendering videos on CPU and GPU
 - data engineering tasks
 
 ## to do
 
-- [] mitigate https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-3646
-- [] reflash the BIOS with coreboot to remove the possibility of bootkits
-- [] ARGB daemon
-- [] wifi client
+- [ ] mitigate https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-3646
+- [ ] reflash the BIOS with coreboot to remove the possibility of bootkits
+- [ ] ARGB daemon (https://github.com/CalcProgrammer1/OpenRGB)
+- [ ] wifi client
 
 ## hardware
 
@@ -275,11 +275,7 @@ reboot
 
 #### ARGB
 
-- install https://github.com/CalcProgrammer1/OpenRGB as a daemon
-
-```bash
-
-```
+to do
 
 ### openwrt x86 VM
 
@@ -419,6 +415,8 @@ sudo usermod -aG docker $USER
 - add ssh key and deploy my `GPU webserver docker stack` using DOCKER_HOST
 
 #### Debian LXC for training
+
+the usual setup with conda, jupyter lab, etc.
 
 ## Docker security
 

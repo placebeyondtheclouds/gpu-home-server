@@ -51,10 +51,10 @@ Total cost: 3700 元
 - OpenWRT, VM
   - WiFi client
 - OPNsense, VM
-  - sensei/suricata
+  - sensei/suricata IPS
   - NAT, firewall, OpenVPN
 - Debian 12, LXC for websites
-  - docker stack: https://github.com/placebeyondtheclouds/gpu-webserver-docker-stack
+  - my webserver docker stack: https://github.com/placebeyondtheclouds/gpu-webserver-docker-stack
     - ollama
     - open-webui
 - Debian 12, LXC for training
@@ -64,18 +64,13 @@ Total cost: 3700 元
     - hashcat
     - jellyfin
     - nextcloud
-    - https://runtipi.io/docs/apps-available
-    - https://docs.techdox.nz/paperless/
-    - https://www.linuxserver.io/
-      - https://fleet.linuxserver.io/image?name=linuxserver/code-server
-      - https://fleet.linuxserver.io/image?name=linuxserver/transmission
-      - https://fleet.linuxserver.io/image?name=linuxserver/jellyfin
+    - IT tools
 
 ## principles
 
-- only sone websites are exposed to the internet through a reverse proxy plus waf plus cloudflare public dns with basic protections
-- all other services are accessed through VPN
-- gpu is shared between LXCs
+- only selected websites are exposed to the internet through the reverse proxy plus waf plus cloudflare public dns with basic protections
+- all other services are accessed through VPN/LAN
+- the GPU is shared between the LXCs
 
 ## hardware setup pictures
 

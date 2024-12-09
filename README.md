@@ -10,6 +10,7 @@ These are my notes. They are minimal instructions for the process that I usually
 - running training/inference code that requires CUDA v.11-12, needs Pascal architecture GPU
 - rendering videos on CPU and GPU
 - data engineering tasks
+- staging environment for Docker containers with GPU-accelerated apps
 
 ## my video about the build
 

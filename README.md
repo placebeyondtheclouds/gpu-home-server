@@ -495,6 +495,7 @@ Speed.#1.........:   570.3 kH/s (50.78ms) @ Accel:8 Loops:1024 Thr:512 Vec:1
 - https://en.wikipedia.org/wiki/Intel_X99
 - https://jginyue.com.cn/index/Article/show/cat_id/48/id/195
 - https://ark.intel.com/content/www/us/en/ark/products/91755/intel-xeon-processor-e5-2697-v4-45m-cache-2-30-ghz.html
+- https://memory.net/product/m393a4k40cb1-crc-samsung-1x-32gb-ddr4-2400-rdimm-pc4-19200t-r-dual-rank-x4-module/
 - https://github.com/morrownr/USB-WiFi/blob/main/home/USB_WiFi_Adapters_that_are_supported_with_Linux_in-kernel_drivers.md#chipset---realtek-rtl8812bu---supported-in-kernel-since-linux-kernel-62-2023-but-kernel-612-2024-is-recommended-due-to-stability-and-performance-enhancements
 - https://www.thermalright.com/product/tf7-2g/
 - https://www.techpowerup.com/gpu-specs/geforce-gt-730.c2590

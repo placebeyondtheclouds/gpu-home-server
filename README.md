@@ -220,7 +220,7 @@ Total cost: 3700 元
 
   - should see `DMAR: Intel(R) Virtualization Technology for Directed I/O`
 
-#### set up updates (my closest mirrors in China)
+#### (optional) set up updates (my closest mirrors in China)
 
 ```bash
 tee /etc/apt/sources.list <<-'EOF'
@@ -363,7 +363,7 @@ lxc.mount.entry: /dev/nvram dev/nvram none bind,optional,create=file
 
 - `timedatectl set-timezone Asia/Shanghai`
 
-- set up updates (again, my closest mirrors in China)
+- (optional) set up the updates (again, my closest mirrors in China)
 
 ```bash
 tee /etc/apt/sources.list <<-'EOF'
@@ -437,7 +437,7 @@ the usual setup with miniconda, jupyter lab, etc.
 
 #### Debian LXC for home network services
 
-clone an LXC with docker, down the existing stack, prune images, deploy the new stack
+clone an LXC with docker, down the existing stack, prune images, deploy the new stack https://github.com/placebeyondtheclouds/my-homelab-services-docker-stack
 
 ```bash
 docker stop $(docker ps -a -q)
@@ -451,6 +451,18 @@ docker system prune -a
 #### Debian LXC video rendering on CPU
 
 - https://www.edoardomarascalchi.it/2024/01/how-to-render-a-kdenlive-project-on-a-different-computer/
+
+#### hashcat
+
+```
+-------------------------------------------------------------
+* Hash-Mode 22000 (WPA-PBKDF2-PMKID+EAPOL) [Iterations: 4095]
+-------------------------------------------------------------
+
+Speed.#1.........:   570.3 kH/s (50.78ms) @ Accel:8 Loops:1024 Thr:512 Vec:1
+```
+
+> approximately 2.92 minutes to brute-force an 8-digit numeric password
 
 ## Docker security
 

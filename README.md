@@ -54,27 +54,24 @@ This hardware can run any commonly used x86 operating system, baremetal or virtu
 - OpenWRT, VM
   - WiFi client
 - OPNsense, VM
-  > [!WARNING]
-  > work in progress
   - sensei/suricata IPS
   - NAT, firewall, OpenVPN
 - Debian 12, LXC for websites
-  > [!WARNING]
-  > work in progress
   - [my webserver docker stack](https://github.com/placebeyondtheclouds/gpu-webserver-docker-stack):
     - ollama
     - open-webui
 - Debian 12, LXC for training
   - conda, jupyter lab
 - Debian 12, LXC for home network tools
-  > [!WARNING]
-  > work in progress
   - [my homelab services docker stack](https://github.com/placebeyondtheclouds/my-homelab-services-docker-stack):
     - [Homepage](https://github.com/gethomepage/homepage)
     - hashcat
     - jellyfin
     - nextcloud
     - IT tools
+
+> [!WARNING]
+> work in progress
 
 ## principles
 

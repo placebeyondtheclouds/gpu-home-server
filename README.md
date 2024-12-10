@@ -1,4 +1,4 @@
-# GPU home server
+# Minimalistic GPU homelab server for AI/ML
 
 These are my notes. They are minimal instructions for the process that I usually follow to get a server up and running and must be adjusted according to the actual needs.
 
@@ -451,6 +451,8 @@ docker rm $(docker ps -a -q)
 docker system prune -a
 ```
 
+shutdown the LXC, in the hypervisor shell run: `pct fstrim 105 && fstrim -a -v`
+
 - hashcat
 
 ```
@@ -484,7 +486,7 @@ Speed.#1.........:   570.3 kH/s (50.78ms) @ Accel:8 Loops:1024 Thr:512 Vec:1
 - idle at 64W, 120W with GPU VRAM loaded and idle, 250W with GPU under load
 - usb dongles on `rtl8812bu` and `mt7921au` didn't work with OpenWRT, `mt7612u` was working but very unstable.
 - must set up BIOS before installing the P40, because in some card-slot combinations with the P40 and the GT730 the system won't POST or will throw `Insufficient PCI resources detected` error
-- thinking back, I put way too much thermal compound on the CPU, a third of that amount would be enough. As for the GPU core, that was kinda intentional, to fill as much surface of the copper plate from both sides as possible.
+- looking back, I put way too much thermal compound on the CPU, a third of that amount would be enough. As for the GPU core, that was kinda intentional, to fill as much surface of the copper plate from both sides as possible.
 
 ## Conclusion
 

@@ -486,6 +486,7 @@ Speed.#1.........:   570.3 kH/s (50.78ms) @ Accel:8 Loops:1024 Thr:512 Vec:1
 - will have to use a NGFF wifi card with PCIe passthrough
 - P40 is not very power efficient at idle when the VRAM is loaded
 - the motherboard has PCIe gen3, so any newer GPU will work but data transfer speeds will be limited to gen3
+- should've put less thermal paste on the CPU
 
 ## 感谢
 

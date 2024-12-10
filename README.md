@@ -46,22 +46,30 @@ Total cost: 3700 元
 
 ## software
 
+This hardware can run any commonly used x86 operating system, baremetal or virtualized. I chose to go with my usual stack:
+
 - Proxmox VE 8.3
   - NVIDIA drivers
   - NVIDIA container toolkit
 - OpenWRT, VM
   - WiFi client
 - OPNsense, VM
+  > [!WARNING]
+  > work in progress
   - sensei/suricata IPS
   - NAT, firewall, OpenVPN
 - Debian 12, LXC for websites
-  - my webserver docker stack: https://github.com/placebeyondtheclouds/gpu-webserver-docker-stack
+  > [!WARNING]
+  > work in progress
+  - [my webserver docker stack](https://github.com/placebeyondtheclouds/gpu-webserver-docker-stack):
     - ollama
     - open-webui
 - Debian 12, LXC for training
   - conda, jupyter lab
 - Debian 12, LXC for home network tools
-  - docker
+  > [!WARNING]
+  > work in progress
+  - [my homelab services docker stack](https://github.com/placebeyondtheclouds/my-homelab-services-docker-stack):
     - [Homepage](https://github.com/gethomepage/homepage)
     - hashcat
     - jellyfin
@@ -72,7 +80,8 @@ Total cost: 3700 元
 
 - only selected websites are exposed to the internet through the reverse proxy plus waf plus cloudflare public dns with basic protections
 - all other services are accessed through VPN/LAN
-- the GPU is shared between the LXCs
+- the GPU resource is shared between the LXCs
+- services are deployed with docker
 
 ## hardware setup pictures
 
@@ -165,7 +174,7 @@ Total cost: 3700 元
 
 ### hypervisor
 
-- boot Proxmox VE 8.3 live cd, hit `e` and add `nomodeset` to the kernel command line, `ctrl` + `x` to boot (because GT730 is too old for the drivers in proxmox)
+- boot Proxmox VE 8.3 live cd, hit `e` and add `nomodeset` to the kernel command line, `ctrl` + `x` to boot (because GT730 is too old for the drivers in proxmox). I used my [hardware CD-ROM emulator](https://github.com/placebeyondtheclouds/rpi-cdrom-emulator-build) to boot from the [ISO](https://enterprise.proxmox.com/iso/proxmox-ve_8.3-1.iso)
 
 #### set up virtualization (IOMMU and VFIO), blacklist default drivers
 
@@ -426,7 +435,7 @@ sudo usermod -aG docker $USER
 
 - test with `docker info | grep -i runtime` and `docker run --rm --runtime=nvidia --gpus all ubuntu nvidia-smi`
 
-- add ssh key and deploy my `GPU webserver docker stack` using DOCKER_HOST
+- add ssh key and deploy my GPU webserver docker stack using DOCKER_HOST
 
 > [!WARNING]
 > work in progress

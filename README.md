@@ -62,6 +62,7 @@ Total cost: 3700 元
   - conda, jupyter lab
 - Debian 12, LXC for home network tools
   - docker
+    - [Homepage](https://github.com/gethomepage/homepage)
     - hashcat
     - jellyfin
     - nextcloud
@@ -427,6 +428,9 @@ sudo usermod -aG docker $USER
 
 - add ssh key and deploy my `GPU webserver docker stack` using DOCKER_HOST
 
+> [!WARNING]
+> work in progress
+
 #### Debian LXC for training
 
 the usual setup with miniconda, jupyter lab, etc.
@@ -441,14 +445,7 @@ docker rm $(docker ps -a -q)
 docker system prune -a
 ```
 
-> [!WARNING]
-> work in progress
-
-#### Debian LXC video rendering on CPU
-
-- https://www.edoardomarascalchi.it/2024/01/how-to-render-a-kdenlive-project-on-a-different-computer/
-
-#### hashcat
+- hashcat
 
 ```
 -------------------------------------------------------------
@@ -459,6 +456,16 @@ Speed.#1.........:   570.3 kH/s (50.78ms) @ Accel:8 Loops:1024 Thr:512 Vec:1
 ```
 
 > approximately 2.92 minutes to brute-force an 8-digit numeric password
+
+> [!WARNING]
+> work in progress
+
+#### Debian LXC video rendering on CPU
+
+- https://www.edoardomarascalchi.it/2024/01/how-to-render-a-kdenlive-project-on-a-different-computer/
+
+> [!WARNING]
+> work in progress
 
 ## Docker security
 
@@ -471,6 +478,7 @@ Speed.#1.........:   570.3 kH/s (50.78ms) @ Accel:8 Loops:1024 Thr:512 Vec:1
 - idle at 64W, 120W with GPU VRAM loaded and idle, 250W with GPU under load
 - usb dongles on `rtl8812bu` and `mt7921au` didn't work with OpenWRT, `mt7612u` was working but very unstable.
 - must set up BIOS before installing the P40, because in some card-slot combinations with the P40 and the GT730 the system won't POST or will throw `Insufficient PCI resources detected` error
+- thinking back, I put way too much thermal compound on the CPU, a third of that amount would be enough. As for the GPU core, that was kinda intentional, to fill as much surface of the copper plate from both sides as possible.
 
 ## Conclusion
 

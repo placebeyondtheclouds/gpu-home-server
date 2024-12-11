@@ -179,7 +179,7 @@ This hardware can run any commonly used x86 operating system, baremetal or virtu
 
 #### set up virtualization (IOMMU and VFIO), blacklist default drivers
 
-- `nano /etc/default/grub`
+- `nano /etc/default/grub` replace the value with:
 
   - ```
     GRUB_CMDLINE_LINUX_DEFAULT="intel_iommu=on iommu=pt nomodeset"
@@ -213,10 +213,9 @@ This is for using NVIDIA driver for P40 on the host with LXCs. To change this co
   KERNEL=="nvidia_uvm", RUN+="/bin/bash -c '/usr/bin/nvidia-modprobe -c0 -u && /bin/chmod 666 /dev/nvidia-uvm*'"
   EOF
   ```
+- do `udevadm control --reload-rules && udevadm trigger` if not planning to reboot shortly
 
-- `echo "options vfio_iommu_type1 allow_unsafe_interrupts=1" > /etc/modprobe.d/iommu_unsafe_interrupts.conf`
-
-- `update-initramfs -u && update-grub && reboot`
+- `update-initramfs -u && update-grub && proxmox-boot-tool refresh && reboot`
 
 - `dmesg | grep -e DMAR -e IOMMU`
 
@@ -275,13 +274,13 @@ dmidecode -t slot | grep -Ei "id:|bus"
 dmidecode --type 9 | grep "Designation: Slot4" -B3 -A10
 ```
 
-it should say `LnkSta: Speed 8GT/s, Width x16` under load and `LnkSta: Speed 2.5GT/s (downgraded), Width x16` when no processes are using the GPU
+the output of `lspci` should say `LnkSta: Speed 8GT/s, Width x16` under load and `LnkSta: Speed 2.5GT/s (downgraded), Width x16` when the driver is installed and no processes are using the GPU
 
 #### install NVIDIA drivers for the P40
 
 `nvidia-smi` binary has been moved to `nvidia-cuda-driver` package (https://forums.developer.nvidia.com/t/nvidia-smi-missing-for-565-drivers-debian-12-packages/311702/5)
 
-must lock to a certain driver version on the host and in the LXC.
+Must lock to a certain driver version on the host and in the LXC. The headers must be installed before the driver.
 
 ```bash
 apt install pve-headers-$(uname -r)
@@ -398,6 +397,8 @@ EOF
 
 apt update && apt upgrade -y
 ```
+
+- `apt install ifupdown2 -y` fixes 5 minute hang after LXC start
 
 - `apt install linux-headers-amd64 -y`
 

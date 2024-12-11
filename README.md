@@ -193,6 +193,8 @@ This hardware can run any commonly used x86 operating system, baremetal or virtu
   EOF
   ```
 
+This is for using NVIDIA driver for P40 on the host with LXCs. To change this config to use the P40 in a VM with PCIe passthrough, modules load order must be specified prioritizing vfio-pci like `softdep nvidia pre: vfio-pci`, and the ID of the P40 must be added like `options vfio-pci ids=10de:1b38` to `/etc/modprobe.d/vfio.conf` in order to isolate the GPU from the host. I'm _not_ going down this route with this build. The GT730 can be passed through to a VM without making any changes since none of the drivers for it are initialized.
+
 - ```bash
   tee /etc/modules-load.d/modules.conf <<-'EOF'
   nvidia
@@ -209,13 +211,6 @@ This hardware can run any commonly used x86 operating system, baremetal or virtu
   KERNEL=="nvidia", RUN+="/bin/bash -c '/usr/bin/nvidia-smi -L && /bin/chmod 666 /dev/nvidia*'"
   KERNEL=="nvidia_modeset", RUN+="/bin/bash -c '/usr/bin/nvidia-modprobe -c0 -m && /bin/chmod 666 /dev/nvidia-modeset*'"
   KERNEL=="nvidia_uvm", RUN+="/bin/bash -c '/usr/bin/nvidia-modprobe -c0 -u && /bin/chmod 666 /dev/nvidia-uvm*'"
-  EOF
-  ```
-
-- ```
-  tee /etc/modprobe.d/vfio.conf <<-'EOF'
-  softdep nouveau pre: vfio-pci
-  softdep snd_hda_intel pre: vfio-pci
   EOF
   ```
 

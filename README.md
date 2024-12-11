@@ -206,7 +206,7 @@ This is for using NVIDIA driver for P40 on the host with LXCs. To change this co
   EOF
   ```
 
-- ```
+- ```bash
   tee /etc/udev/rules.d/70-nvidia.rules <<-'EOF'
   KERNEL=="nvidia", RUN+="/bin/bash -c '/usr/bin/nvidia-smi -L && /bin/chmod 666 /dev/nvidia*'"
   KERNEL=="nvidia_modeset", RUN+="/bin/bash -c '/usr/bin/nvidia-modprobe -c0 -m && /bin/chmod 666 /dev/nvidia-modeset*'"
@@ -326,7 +326,7 @@ continue expanding root filesystem
 - `lsblk -o PATH,SIZE,PARTUUID > /root/lsblk_old.txt`
 - `cat /boot/grub/grub.cfg`
 - `fdisk /dev/sda` -> `p` -> `d` -> `2` -> `n` -> `p` -> `2` -> 33792 enter -> `enter` -> `n` -> `w`
-- ```shell
+- ```bash
   BOOT="$(sed -n -e "/\s\/boot\s.*$/{s///p;q}" /etc/mtab)"
   DISK="${BOOT%%[0-9]*}"
   PART="$((${BOOT##*[^0-9]}+1))"
@@ -537,3 +537,4 @@ it can be passed through to a VM with `x-vga=1` and connected with HDMI cable to
 - https://digitalspaceport.com/proxmox-multi-gpu-passthru-for-lxc-and-docker-ai-homelab-server/
 - https://forum.openwrt.org/t/howto-resizing-root-partition-on-x86/140631
 - https://docs.nvidia.com/deploy/driver-persistence/index.html
+- https://forum.proxmox.com/threads/pci-gpu-passthrough-on-proxmox-ve-8-installation-and-configuration.130218/

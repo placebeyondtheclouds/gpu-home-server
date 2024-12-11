@@ -26,6 +26,7 @@ These are my notes. They are minimal instructions for the process that I usually
 ## hardware
 
 - **NVIDIA TESLA P40**, PCIe 3.0 x16, TDP 250 W - 1649 元 **used**
+  - supports the latest driver version (565 at the moment)
 - 2x PCIe 8pin to 1x **EPS 8pin adapter** 18AWG - was included with the GPU
   - might be an overkill as I could just use the spare 8pin CPU power cable from the PSU, but better make use of the two PCIe power cables
 - custom made **长城战龙 240mm ARGB**-based waterblock solution for GPU - 459 元
@@ -41,6 +42,7 @@ These are my notes. They are minimal instructions for the process that I usually
 - **NVMe SSD 500GB** gen4 x4, left from laptop storage upgrade
 - ~~**wifi dongle** Realtek rtl8812bu wifi5 usb3, bought before~~
 - Dell **NVIDIA GT730 GPU**, PCIe gen2 x1 - 133 元 **used**
+  - latest supported driver version is 470
 
 Total cost: 3700 元
 
@@ -166,6 +168,8 @@ This hardware can run any commonly used x86 operating system, baremetal or virtu
     - PCH configuration -> disable sSATA and SATA controllers
 
 - install the P40
+- disconnect fan cable from the GT730, it's noisy and the GPU is not overheating without it at idle
+  <br><img src="./pictures/GT730.png" alt="screenshot" width="50%">
 
 ## software setup process
 
@@ -267,7 +271,7 @@ EOF
 - `apt install stress s-tui`
 - `stress --cpu 38 --timeout 60`
 
-#### install NVIDIA drivers
+#### install NVIDIA drivers for the P40
 
 `nvidia-smi` binary has been moved to `nvidia-cuda-driver` package (https://forums.developer.nvidia.com/t/nvidia-smi-missing-for-565-drivers-debian-12-packages/311702/5)
 
@@ -474,6 +478,10 @@ Speed.#1.........:   570.3 kH/s (50.78ms) @ Accel:8 Loops:1024 Thr:512 Vec:1
 
 > [!WARNING]
 > work in progress
+
+## making use of the GT730
+
+it can be passed through to a VM with `x-vga=1` and connected with HDMI cable to a display or a TV to be used as a regular computer, "smart tv" etc.
 
 ## Docker security
 

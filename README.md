@@ -248,7 +248,7 @@ EOF
 
 `rm /etc/apt/sources.list.d/pve-enterprise.list`
 
-```
+```bash
 cat > /etc/apt/sources.list.d/ceph.list << EOF
 deb http://download.proxmox.com/debian/ceph-reef bookworm no-subscription
 EOF
@@ -271,6 +271,17 @@ EOF
 - `apt install stress s-tui`
 - `stress --cpu 38 --timeout 60`
 
+#### check the GPU
+
+```bash
+lspci | grep NVIDIA
+lspci -n -vv -s 07:00 | grep -Ei "lnk|slot"
+dmidecode -t slot | grep -Ei "id:|bus"
+dmidecode --type 9 | grep "Designation: Slot4" -B3 -A10
+```
+
+it should say `LnkSta: Speed 8GT/s, Width x16` under load and `LnkSta: Speed 2.5GT/s (downgraded), Width x16` when no processes are using the GPU
+
 #### install NVIDIA drivers for the P40
 
 `nvidia-smi` binary has been moved to `nvidia-cuda-driver` package (https://forums.developer.nvidia.com/t/nvidia-smi-missing-for-565-drivers-debian-12-packages/311702/5)
@@ -291,7 +302,7 @@ reboot
 
 - `lspci -nnk | grep -i nvidia`
   - should see `Kernel driver in use: nvidia`
-- `nvidia-smi -i 0 -q`
+- `nvidia-smi -i 0 -q | grep -Ei "driver|product|bus|link|max|current|performance"`
 
 #### ARGB
 

@@ -2,6 +2,10 @@
 
 These are my notes. They are minimal instructions for the process that I usually follow to get a server up and running and must be adjusted according to the actual needs.
 
+## end result
+
+- mATX-sized server with 24GB VRAM running GPU-accelerated LXC containers, ready to deploy docker stacks
+
 ## use cases
 
 - running homelab VMs
@@ -43,8 +47,10 @@ These are my notes. They are minimal instructions for the process that I usually
 - ~~**wifi dongle** Realtek rtl8812bu wifi5 usb3, bought before~~
 - Dell **NVIDIA GT730 GPU**, PCIe gen2 x1 - 133 元 **used**
   - latest supported driver version is 470
+- Intel AX200 **NGFF wifi card** - 66 元
+- **冰曼 GK120 white ARGB** 120mm fan - 16 元
 
-Total cost: 3700 元
+Total cost: 3800 元
 
 ## software
 
@@ -163,13 +169,20 @@ This hardware can run any commonly used x86 operating system, baremetal or virtu
     - Enable SR-IOV Support
     - MMIOHBase set to 2T
   - CSM configuration -> UEFI only
-  - intelrcsetup
-    - advanced power management configuration -> power technology -> enegry efficient
+  - intelRCSetup
+    - advanced power management configuration ->
+      - power technology -> energy efficient
+      - config TDP -> disable
+      - CPU - advanced pm tuning -> energy perf bias ->
+        - energy performance tuning - enable
+        - workload -> balanced
     - PCH configuration -> disable sSATA and SATA controllers
 
 - install the P40
 - disconnect fan cable from the GT730, it's noisy and the GPU is not overheating without it at idle
   <br><img src="./pictures/GT730.png" alt="screenshot" width="50%">
+
+- _edit:_ I added one more 120MM fan to the front panel blowing alongside the GPUs, just to be on the safe side
 
 ## software setup process
 
@@ -263,6 +276,7 @@ EOF
 #### test CPU stability
 
 - `apt install stress s-tui`
+- `watch -n1 "cat /proc/cpuinfo | grep MHz"`
 - `stress --cpu 38 --timeout 60`
 
 #### check the GPU
@@ -316,7 +330,7 @@ reboot
 
 boot. ssh into it, user `root`, password is blank.
 
-add eth nic to connect to the internet temporarily, configure opkg feed links to the servers(mirror-03.infra.openwrt.org or downloads.openwrt.org or thatever that is working), install packages for the usb wifi dongle chip and `wpa-supplicant-openssl` (for WPA3), reboot connect to the wifi
+add eth nic to connect to the internet temporarily, configure opkg feed links to the servers(mirror-03.infra.openwrt.org or downloads.openwrt.org or thatever that is working), install packages for the wifi (`kmod-iwlwifi` and `iwlwifi-firmware-ax200` for AX200) and `wpa-supplicant-openssl` (for WPA3), reboot connect to the wifi
 
 continue expanding root filesystem
 

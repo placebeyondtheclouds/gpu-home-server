@@ -48,7 +48,7 @@ These are my notes. They are minimal instructions for the process that I usually
 - Dell **NVIDIA GT730 GPU**, PCIe gen2 x1 - 133 元 **used**
   - latest supported driver version is 470
 - Intel AX200 **NGFF wifi card** - 66 元
-- **冰曼 GK120 white ARGB** 120mm fan - 16 元
+- **冰曼 GK120 white ARGB** 120mm fan, mistakenly bought the version without the lights on the blades, should've went with NK120 - 16 元
 
 Total cost: 3800 元
 

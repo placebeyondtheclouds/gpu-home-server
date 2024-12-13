@@ -15,17 +15,18 @@ These are my notes. They are minimal instructions for the process that I usually
 - rendering videos on CPU and GPU
 - data engineering tasks
 - staging environment for Docker containers with GPU-accelerated apps
+- code compilation
 
 ## my video about the build
 
-[![Minimalistic homelab GPU server for Proxmox and Docker - 2024-12-7](https://img.youtube.com/vi/dfDnEBk9l6s/0.jpg)](https://www.youtube.com/watch?v=dfDnEBk9l6s "Minimalistic homelab GPU server for Proxmox and Docker - 2024-12-7")
+[![Building minimalistic homelab GPU server for Proxmox and Docker - 2024-12-7](https://img.youtube.com/vi/dfDnEBk9l6s/0.jpg)](https://www.youtube.com/watch?v=dfDnEBk9l6s "Building minimalistic homelab GPU server for Proxmox and Docker - 2024-12-7")
 
 ## to do
 
 - [ ] mitigate https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-3646
 - [ ] reflash the BIOS with coreboot to remove the possibility of bootkits
 - [ ] ARGB daemon (https://github.com/CalcProgrammer1/OpenRGB)
-- [ ] wifi client
+- [x] wifi client
 
 ## hardware
 

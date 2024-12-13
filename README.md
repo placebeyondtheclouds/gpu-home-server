@@ -147,6 +147,9 @@ This hardware can run any commonly used x86 operating system, baremetal or virtu
 | ![pic55](pictures/2024-12-05%2011.51.50.jpg) | ![pic56](pictures/2024-12-05%2012.01.30.jpg) | ![pic57](pictures/2024-12-06%2007.05.46.jpg) |
 | :------------------------------------------: | :------------------------------------------: | :------------------------------------------: |
 
+| ![pic58](pictures/2024-12-13%2010.40.08.jpg) | ![pic59](pictures/2024-12-13%2010.23.00.jpg) | ![pic60](pictures/2024-12-13%2010.24.08.jpg) |
+| :------------------------------------------: | :------------------------------------------: | :------------------------------------------: |
+
 ## hardware setup process
 
 - assemble minimal setup with CPU, RAM, the small GPU, PSU, motherboard and get it to POST

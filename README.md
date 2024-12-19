@@ -167,6 +167,7 @@ This hardware can run any commonly used x86 operating system, baremetal or virtu
 
 - set up BIOS
 
+  - advanced -> smart fan function -> set both PWM1 to 100
   - PCI subsystem settings ->
     - Enable above 4G decoding (otherwise will be faced with `Insufficient PCI resources detected`)
     - Enable Re-Size BAR Support [explainer](https://www.reddit.com/r/pcmasterrace/comments/1b4sy75/comment/kt24k82/)
@@ -281,7 +282,7 @@ EOF
 
 - `apt install stress s-tui`
 - `watch -n1 "cat /proc/cpuinfo | grep MHz"`
-- `stress --cpu 38 --timeout 60`
+- `stress --cpu 36 --timeout 120`
 
 #### check the GPU
 
@@ -325,7 +326,7 @@ reboot
 
 - `wget https://downloads.openwrt.org/releases/23.05.5/targets/x86/64/openwrt-23.05.5-x86-64-generic-ext4-combined.img.gz`
 - `gunzip openwrt-*.img.gz`
-- `qemu-img resize -f raw openwrt-*.img 8G`
+- `qemu-img resize -f raw openwrt-*.img 8G` or any other size, 512MB should be enough
 - create new VM (no drives, SeaBIOS)
 - `qm importdisk 103 openwrt-23.05.5-x86-64-generic-ext4-combined.img local-lvm`
 - set the disk to VirtIO block, discard=enabled, add
@@ -334,7 +335,7 @@ reboot
 
 boot. ssh into it, user `root`, password is blank.
 
-add eth nic to connect to the internet temporarily, configure opkg feed links to the servers(mirror-03.infra.openwrt.org or downloads.openwrt.org or thatever that is working), install packages for the wifi (`kmod-iwlwifi` and `iwlwifi-firmware-ax200` for AX200) and `wpa-supplicant-openssl` (for WPA3), reboot connect to the wifi
+add eth nic to connect to the internet temporarily, configure opkg feed links to the servers(mirror-03.infra.openwrt.org or downloads.openwrt.org or thatever that is working), install the packages for the wifi (`kmod-iwlwifi` and `iwlwifi-firmware-ax200` for AX200) and `wpa-supplicant-openssl` (for WPA3), reboot, connect to the wifi
 
 continue expanding root filesystem
 
@@ -420,7 +421,7 @@ apt update && apt upgrade -y
 
 - `apt install linux-headers-amd64 -y`
 
-- `apt install screen curl gpg -y`
+- `apt install screen curl gpg rsync -y`
 
 - install NVIDIA drivers, same commands as for the host minus the `pve-headers-$(uname -r)` package
 
@@ -506,7 +507,7 @@ Speed.#1.........:   570.3 kH/s (50.78ms) @ Accel:8 Loops:1024 Thr:512 Vec:1
 
 ## making use of the GT730
 
-it can be passed through to a VM with `x-vga=1` and connected with HDMI cable to a display or a TV to be used as a regular computer, "smart tv" etc.
+it can be passed through to a VM with `x-vga=1` and connected with HDMI cable to a display or a TV to be used as a regular computer, "smart tv" etc. install 470 drivers for ubuntu and switch GDM to Xorg for video acceleration to work.
 
 ## Docker security
 

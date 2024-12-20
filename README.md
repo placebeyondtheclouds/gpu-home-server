@@ -467,10 +467,6 @@ sudo usermod -aG docker $USER
 > [!WARNING]
 > work in progress
 
-#### Debian LXC for training
-
-the usual setup with miniconda, jupyter lab, etc.
-
 #### Debian LXC for home network services
 
 clone an LXC with docker, down the existing stack, prune images, deploy the new stack https://github.com/placebeyondtheclouds/my-homelab-services-docker-stack
@@ -497,6 +493,12 @@ Speed.#1.........:   570.3 kH/s (50.78ms) @ Accel:8 Loops:1024 Thr:512 Vec:1
 
 > [!WARNING]
 > work in progress
+
+#### Debian LXC for training
+
+same as above, clone and wipe an LXC.
+
+the usual setup with miniconda, jupyter lab, etc.
 
 #### Debian LXC video rendering on CPU
 

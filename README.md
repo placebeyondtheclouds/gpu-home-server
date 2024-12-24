@@ -27,6 +27,7 @@ These are my notes. They are minimal instructions for the process that I usually
 - [ ] reflash the BIOS with coreboot to remove the possibility of bootkits
 - [ ] ARGB daemon (https://github.com/CalcProgrammer1/OpenRGB)
 - [x] wifi client
+- [ ] rootless docker
 
 ## hardware
 
@@ -440,7 +441,7 @@ sudo nvidia-ctk runtime configure --runtime=docker
 
 #### Debian LXC for websites
 
-- install docker engine
+- install docker engine. this is a basic setup and must be adjusted according to the actual needs, made rootless .etc.
 
 ```
 # Add Docker's official GPG key:
@@ -459,6 +460,8 @@ sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 sudo usermod -aG docker $USER
 ```
+
+- set up proxy settings for docker (if needed)
 
 - test with `docker info | grep -i runtime` and `docker run --rm --runtime=nvidia --gpus all ubuntu nvidia-smi`
 

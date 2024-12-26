@@ -1,6 +1,6 @@
 # Minimalistic GPU homelab server for AI/ML
 
-These are my notes. They are minimal instructions for the process that I usually follow to get a server up and running and must be adjusted according to the actual needs.
+These are my notes and not a refined guide. They are the build process walkthrough and also minimal instructions for the process that I usually follow to get a server up and running, and must be adjusted according to the actual needs.
 
 ## end result
 

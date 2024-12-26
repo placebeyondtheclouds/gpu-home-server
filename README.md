@@ -368,7 +368,9 @@ user `installer`, password `opnsense`
 
 ### common setup for all LXCs
 
-- download Debian-12 template and create unprivileged LXC with Debian 12
+- download Debian-12 template and create unprivileged LXC with Debian 12.
+
+  - Options -> Features -> keyctl=1,nesting=1 (this is [required](https://pve.proxmox.com/wiki/Linux_Container) for running docker in LXC)
 
 - add GPU to the config, run `ls -al /dev/nv* | grep -v nvme` edit `nano /etc/pve/lxc/100.conf` according to the output:
 
@@ -441,7 +443,7 @@ sudo nvidia-ctk runtime configure --runtime=docker
 
 #### Debian LXC for websites
 
-- install docker engine. this is a basic setup and must be adjusted according to the actual needs, made rootless .etc.
+- install docker engine. this is a basic setup and must be adjusted according to the actual needs.
 
 ```
 # Add Docker's official GPG key:
@@ -563,3 +565,4 @@ it can be passed through to a VM with `x-vga=1` and connected with HDMI cable to
 - https://forum.openwrt.org/t/howto-resizing-root-partition-on-x86/140631
 - https://docs.nvidia.com/deploy/driver-persistence/index.html
 - https://forum.proxmox.com/threads/pci-gpu-passthrough-on-proxmox-ve-8-installation-and-configuration.130218/
+- https://pve.proxmox.com/wiki/Linux_Container

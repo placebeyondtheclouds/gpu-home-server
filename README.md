@@ -536,6 +536,7 @@ it can be passed through to a VM with `x-vga=1` and connected with HDMI cable to
 - P40 is not very power efficient at idle when the VRAM is loaded
 - the motherboard has PCIe gen3, so any newer GPU will work but data transfer speeds will be limited to gen3
 - should've put less thermal paste on the CPU
+- can't add a second GPU, the motherboard has only one PCIe x16 slot and the case is too small for a second waterblock to be put inside
 
 ## 感谢
 

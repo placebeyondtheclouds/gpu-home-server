@@ -277,7 +277,18 @@ EOF
 
 #### tune power consumption
 
-- `apt install powertop && powertop --auto-tune`
+- `apt install powertop`
+
+put into `crontab -e`:
+
+```bash
+@reboot /usr/sbin/powertop --auto-tune
+@reboot /bin/echo powersave | /usr/bin/tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+```
+
+after reboot check with:
+
+- `grep . /sys/devices/system/cpu/cpu0/cpufreq/*`
 
 #### test CPU stability
 
@@ -505,6 +516,12 @@ same as above, clone and wipe an LXC.
 
 the usual setup with miniconda, jupyter lab, etc.
 
+bind mount the data dir on the host:
+
+```bash
+pct set 105 -mp0 /mnt/training,mp=/mnt/training
+```
+
 #### Debian LXC video rendering on CPU
 
 - https://www.edoardomarascalchi.it/2024/01/how-to-render-a-kdenlive-project-on-a-different-computer/
@@ -568,3 +585,4 @@ it can be passed through to a VM with `x-vga=1` and connected with HDMI cable to
 - https://docs.nvidia.com/deploy/driver-persistence/index.html
 - https://forum.proxmox.com/threads/pci-gpu-passthrough-on-proxmox-ve-8-installation-and-configuration.130218/
 - https://pve.proxmox.com/wiki/Linux_Container
+- https://en.wikipedia.org/wiki/Pascal_(microarchitecture)

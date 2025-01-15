@@ -328,6 +328,11 @@ reboot
 - `lspci -nnk | grep -i nvidia`
   - should see `Kernel driver in use: nvidia`
 - `nvidia-smi -i 0 -q | grep -Ei "driver|product|bus|link|max|current|performance"`
+- `nvidia-smi -q -i 0 -d CLOCK`
+
+#### check the GPU stability under load
+
+- `nvidia-smi -q -i 0 -d PERFORMANCE` must have event reasons `Not Active`
 
 #### ARGB
 
@@ -439,6 +444,8 @@ apt update && apt upgrade -y
 
 - install NVIDIA drivers, same commands as for the host minus the `pve-headers-$(uname -r)` package
 
+#### Debian LXC with docker
+
 - install nvidia-container-toolkit
 
 ```bash
@@ -452,9 +459,7 @@ sudo nvidia-ctk runtime configure --runtime=docker
 
 - `logout`
 
-#### Debian LXC for websites
-
-- install docker engine. this is a basic setup and must be adjusted according to the actual needs.
+- install docker engine. this is a basic setup and must be adjusted according to the actual needs:
 
 ```
 # Add Docker's official GPG key:
@@ -533,6 +538,10 @@ pct set 105 -mp0 /mnt/training,mp=/mnt/training
 
 it can be passed through to a VM with `x-vga=1` and connected with HDMI cable to a display or a TV to be used as a regular computer, "smart tv" etc. install 470 drivers for ubuntu and switch GDM to Xorg for video acceleration to work.
 
+it can also be passed to a windows 11 vm, needs driver version 475.14.
+
+Under the VM settings, go to Hardware -> Display Adapter = "none".
+
 ## Docker security
 
 - https://github.com/wsargent/docker-cheat-sheet?tab=readme-ov-file#security
@@ -586,3 +595,5 @@ it can be passed through to a VM with `x-vga=1` and connected with HDMI cable to
 - https://forum.proxmox.com/threads/pci-gpu-passthrough-on-proxmox-ve-8-installation-and-configuration.130218/
 - https://pve.proxmox.com/wiki/Linux_Container
 - https://en.wikipedia.org/wiki/Pascal_(microarchitecture)
+- https://developer.nvidia.com/blog/increase-performance-gpu-boost-k80-autoboost/
+- https://forum.level1techs.com/t/gaming-on-my-tesla-more-likely-than-you-think/171185

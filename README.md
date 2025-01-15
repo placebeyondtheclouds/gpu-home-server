@@ -339,7 +339,7 @@ reboot
 > [!WARNING]
 > work in progress
 
-### openwrt x86 VM
+### (optional) openwrt x86 VM
 
 - `wget https://downloads.openwrt.org/releases/23.05.5/targets/x86/64/openwrt-23.05.5-x86-64-generic-ext4-combined.img.gz`
 - `gunzip openwrt-*.img.gz`
@@ -373,7 +373,7 @@ continue expanding root filesystem
   reboot
   ```
 
-### OPNsense VM
+### (optional) OPNsense VM
 
 - https://opnsense.org/download/
 
@@ -405,7 +405,7 @@ lxc.mount.entry: /dev/nvidia-uvm-tools dev/nvidia-uvm-tools none bind,optional,c
 lxc.mount.entry: /dev/nvram dev/nvram none bind,optional,create=file
 ```
 
-- start the LXC
+- start the LXC, the following commands are to be executed inside the LXC
 
 - add local admin: `adduser admin && usermod -aG sudo admin`
 
@@ -444,7 +444,9 @@ apt update && apt upgrade -y
 
 - install NVIDIA drivers, same commands as for the host minus the `pve-headers-$(uname -r)` package
 
-#### Debian LXC with docker
+#### continue setting up the Debian LXC with GPU-enabled docker
+
+the following commands are to be executed inside the LXC.
 
 - install nvidia-container-toolkit
 

@@ -58,9 +58,9 @@ Total cost: 3800 元
 
 This hardware can run any commonly used x86 operating system, baremetal or virtualized. I chose to go with my usual stack:
 
-- Proxmox VE 8.3
-  - NVIDIA drivers
-  - NVIDIA container toolkit
+- Proxmox VE 8.3.2, kernel 6.8.12-6-pve
+- NVIDIA drivers 565.57.01
+- NVIDIA container toolkit 1.17.3-1
 - OpenWRT, VM
   - WiFi client
 - OPNsense, VM
@@ -77,7 +77,7 @@ This hardware can run any commonly used x86 operating system, baremetal or virtu
     - [Homepage](https://github.com/gethomepage/homepage)
     - hashcat
     - jellyfin
-    - nextcloud
+    - Juice server (GPU-over-IP)
     - IT tools
 
 > [!WARNING]
@@ -240,7 +240,9 @@ This is for using NVIDIA driver for P40 on the host with LXCs. To change this co
 
   - should see `DMAR: Intel(R) Virtualization Technology for Directed I/O`
 
-#### (optional) set up updates (my closest mirrors in China)
+#### set up updates
+
+for China:
 
 ```bash
 tee /etc/apt/sources.list <<-'EOF'
@@ -259,6 +261,21 @@ deb https://mirrors.tuna.tsinghua.edu.cn/proxmox/debian/pve bookworm pve-no-subs
 EOF
 ```
 
+for the rest of the world:
+
+```bash
+tee /etc/apt/sources.list <<-'EOF'
+deb http://ftp.debian.org/debian bookworm main contrib
+deb http://ftp.debian.org/debian bookworm-updates main contrib
+
+# Proxmox VE pve-no-subscription repository provided by proxmox.com,
+# NOT recommended for production use
+deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription
+
+# security updates
+deb http://security.debian.org/debian-security bookworm-security main contrib
+```
+
 `rm /etc/apt/sources.list.d/pve-enterprise.list`
 
 ```bash
@@ -267,13 +284,15 @@ deb http://download.proxmox.com/debian/ceph-reef bookworm no-subscription
 EOF
 ```
 
-`apt update && apt dist-upgrade -y`
+`apt update && apt full-upgrade -y`
 
 `sed -Ezi.bak "s/(Ext.Msg.show\(\{\s+title: gettext\('No valid sub)/void\(\{ \/\/\1/g" /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js && systemctl restart pveproxy.service`
 
 `apt install mc screen iputils-tracepath stress s-tui iptraf-ng unzip lshw lm-sensors freeipmi-tools htop btop -y`
 
 `sensors-detect --auto`
+
+`shutdown -r now`
 
 #### tune power consumption
 
@@ -311,10 +330,10 @@ the output of `lspci` should say `LnkSta: Speed 8GT/s, Width x16` under load and
 
 `nvidia-smi` binary has been moved to `nvidia-cuda-driver` package (https://forums.developer.nvidia.com/t/nvidia-smi-missing-for-565-drivers-debian-12-packages/311702/5)
 
-Must lock to a certain driver version on the host and in the LXC. The headers must be installed before the driver.
+Must lock to a certain driver version on the host and in the LXC. The headers must be installed before the driver. `pve-headers` is deprecated.
 
 ```bash
-apt install pve-headers-$(uname -r)
+apt install proxmox-headers-$(uname -r)
 curl -fSsL https://developer.download.nvidia.com/compute/cuda/repos/debian12/x86_64/3bf863cc.pub | gpg --dearmor | tee /usr/share/keyrings/nvidia-drivers.gpg > /dev/null 2>&1
 apt update
 apt install dirmngr ca-certificates software-properties-common apt-transport-https dkms -y
@@ -334,53 +353,7 @@ reboot
 
 - `nvidia-smi -q -i 0 -d PERFORMANCE` must have event reasons `Not Active`
 
-#### ARGB
-
-> [!WARNING]
-> work in progress
-
-### (optional) openwrt x86 VM
-
-- `wget https://downloads.openwrt.org/releases/23.05.5/targets/x86/64/openwrt-23.05.5-x86-64-generic-ext4-combined.img.gz`
-- `gunzip openwrt-*.img.gz`
-- `qemu-img resize -f raw openwrt-*.img 8G` or any other size, 512MB should be enough
-- create new VM (no drives, SeaBIOS)
-- `qm importdisk 103 openwrt-23.05.5-x86-64-generic-ext4-combined.img local-lvm`
-- set the disk to VirtIO block, discard=enabled, add
-- change boot order
-- add usb wifi dongle
-
-boot. ssh into it, user `root`, password is blank.
-
-add eth nic to connect to the internet temporarily, configure opkg feed links to the servers(mirror-03.infra.openwrt.org or downloads.openwrt.org or thatever that is working), install the packages for the wifi (`kmod-iwlwifi` and `iwlwifi-firmware-ax200` for AX200) and `wpa-supplicant-openssl` (for WPA3), reboot, connect to the wifi
-
-continue expanding root filesystem
-
-- `opkg update && opkg install lsblk fdisk losetup resize2fs`
-- `lsblk -o PATH,SIZE,PARTUUID`
-- `lsblk -o PATH,SIZE,PARTUUID > /root/lsblk_old.txt`
-- `cat /boot/grub/grub.cfg`
-- `fdisk /dev/sda` -> `p` -> `d` -> `2` -> `n` -> `p` -> `2` -> 33792 enter -> `enter` -> `n` -> `w`
-- ```bash
-  BOOT="$(sed -n -e "/\s\/boot\s.*$/{s///p;q}" /etc/mtab)"
-  DISK="${BOOT%%[0-9]*}"
-  PART="$((${BOOT##*[^0-9]}+1))"
-  ROOT="${DISK}${PART}"
-  LOOP="$(losetup -f)"
-  losetup ${LOOP} ${ROOT}
-  fsck.ext4 -y -f ${LOOP}
-  resize2fs ${LOOP}
-  reboot
-  ```
-
-### (optional) OPNsense VM
-
-- https://opnsense.org/download/
-
-user `installer`, password `opnsense`
-
-> [!WARNING]
-> work in progress
+## LXCs
 
 ### common setup for all LXCs
 
@@ -405,9 +378,11 @@ lxc.mount.entry: /dev/nvidia-uvm-tools dev/nvidia-uvm-tools none bind,optional,c
 lxc.mount.entry: /dev/nvram dev/nvram none bind,optional,create=file
 ```
 
-- start the LXC, the following commands are to be executed inside the LXC
+start the LXC, the following commands are to be executed inside the LXC
 
 - add local admin: `adduser admin && usermod -aG sudo admin`
+
+- login as root, or do `sudo su` if logged in as a user
 
 - `dpkg-reconfigure locales` and set en_US.UTF-8 as default
 
@@ -442,24 +417,11 @@ apt update && apt upgrade -y
 
 - `apt install screen curl gpg rsync -y`
 
-- install NVIDIA drivers, same commands as for the host minus the `pve-headers-$(uname -r)` package
+- install NVIDIA drivers, same commands as for the host minus the `proxmox-headers-$(uname -r)` package
 
-#### continue setting up the Debian LXC with GPU-enabled docker
+### continue setting up the Debian LXC with GPU-enabled docker
 
 the following commands are to be executed inside the LXC.
-
-- install nvidia-container-toolkit
-
-```bash
-apt install nvidia-container-toolkit
-sudo nvidia-ctk runtime configure --runtime=docker
-```
-
-- `sed -i 's/#no-cgroups = false/no-cgroups = true/' /etc/nvidia-container-runtime/config.toml`
-
-- check with `nvidia-container-cli -k -d /dev/tty info`
-
-- `logout`
 
 - install docker engine. this is a basic setup and must be adjusted according to the actual needs:
 
@@ -483,6 +445,19 @@ sudo usermod -aG docker $USER
 
 - set up proxy settings for docker (if needed)
 
+- `logout`
+
+- install nvidia-container-toolkit
+
+```bash
+apt install nvidia-container-toolkit
+sed -i 's/#no-cgroups = false/no-cgroups = true/' /etc/nvidia-container-runtime/config.toml
+nvidia-ctk runtime configure --runtime=docker
+systemctl restart docker
+```
+
+- check with `nvidia-container-cli -k -d /dev/tty info`
+
 - test with `docker info | grep -i runtime` and `docker run --rm --runtime=nvidia --gpus all ubuntu nvidia-smi`
 
 - add ssh key and deploy my GPU webserver docker stack using DOCKER_HOST
@@ -490,9 +465,9 @@ sudo usermod -aG docker $USER
 > [!WARNING]
 > work in progress
 
-#### Debian LXC for home network services
+### Debian LXC for homelab network services
 
-clone an LXC with docker, down the existing stack, prune images, deploy the new stack https://github.com/placebeyondtheclouds/my-homelab-services-docker-stack
+clone an LXC with docker (use unique MAC address and ID), down the existing stack, prune images
 
 ```bash
 docker stop $(docker ps -a -q)
@@ -502,22 +477,12 @@ docker system prune -a
 
 shutdown the LXC, in the hypervisor shell run: `pct fstrim 105 && fstrim -a -v`
 
-- hashcat
-
-```
--------------------------------------------------------------
-* Hash-Mode 22000 (WPA-PBKDF2-PMKID+EAPOL) [Iterations: 4095]
--------------------------------------------------------------
-
-Speed.#1.........:   570.3 kH/s (50.78ms) @ Accel:8 Loops:1024 Thr:512 Vec:1
-```
-
-> approximately 2.92 minutes to brute-force an 8-digit numeric password
+[add ssh key and deploy homelab network services stack](https://github.com/placebeyondtheclouds/my-homelab-services-docker-stack)
 
 > [!WARNING]
 > work in progress
 
-#### Debian LXC for training
+### Debian LXC for training
 
 same as above, clone and wipe an LXC.
 
@@ -529,9 +494,57 @@ bind mount the data dir on the host:
 pct set 105 -mp0 /mnt/training,mp=/mnt/training
 ```
 
-#### Debian LXC video rendering on CPU
+### Debian LXC video rendering on CPU
 
 - https://www.edoardomarascalchi.it/2024/01/how-to-render-a-kdenlive-project-on-a-different-computer/
+
+> [!WARNING]
+> work in progress
+
+### (optional) ARGB
+
+> [!WARNING]
+> work in progress
+
+## (optional) openwrt x86 VM
+
+- `wget https://downloads.openwrt.org/releases/23.05.5/targets/x86/64/openwrt-23.05.5-x86-64-generic-ext4-combined.img.gz`
+- `gunzip openwrt-*.img.gz`
+- `qemu-img resize -f raw openwrt-*.img 8G` or any other size, 512MB should be enough
+- create new VM (no drives, SeaBIOS)
+- `qm importdisk 103 openwrt-23.05.5-x86-64-generic-ext4-combined.img local-lvm`
+- set the disk to VirtIO block, discard=enabled, add
+- change boot order
+- add usb wifi dongle
+
+boot. ssh into it, user `root`, password is blank.
+
+add eth nic to connect to the internet temporarily, configure opkg feed links to the servers(mirror-03.infra.openwrt.org or downloads.openwrt.org or thatever that is working), install the packages for the wifi (`kmod-iwlwifi` and `iwlwifi-firmware-ax200` for AX200) and `wpa-supplicant-openssl` (for WPA3), reboot, connect to the wifi
+
+continue expanding root filesystem
+
+- `opkg update && opkg install lsblk fdisk losetup resize2fs`
+- `lsblk -o PATH,SIZE,PARTUUID`
+- `lsblk -o PATH,SIZE,PARTUUID > /root/lsblk_old.txt`
+- `cat /boot/grub/grub.cfg`
+- `fdisk /dev/sda` -> `p` -> `d` -> `2` -> `n` -> `p` -> `2` -> 33792 enter -> `enter` -> `n` -> `w`
+- ```bash
+  BOOT="$(sed -n -e "/\s\/boot\s.*$/{s///p;q}" /etc/mtab)"
+  DISK="${BOOT%%[0-9]*}"
+  PART="$((${BOOT##*[^0-9]}+1))"
+  ROOT="${DISK}${PART}"
+  LOOP="$(losetup -f)"
+  losetup ${LOOP} ${ROOT}
+  fsck.ext4 -y -f ${LOOP}
+  resize2fs ${LOOP}
+  reboot
+  ```
+
+## (optional) OPNsense VM
+
+- https://opnsense.org/download/
+
+user `installer`, password `opnsense`
 
 > [!WARNING]
 > work in progress
@@ -599,3 +612,9 @@ Under the VM settings, go to Hardware -> Display Adapter = "none".
 - https://en.wikipedia.org/wiki/Pascal_(microarchitecture)
 - https://developer.nvidia.com/blog/increase-performance-gpu-boost-k80-autoboost/
 - https://forum.level1techs.com/t/gaming-on-my-tesla-more-likely-than-you-think/171185
+- https://www.youtube.com/watch?v=0ZDr5h52OOE
+- https://unix.stackexchange.com/questions/189670/whats-the-difference-of-etc-modules-load-d-and-etc-modules
+- https://www.youtube.com/watch?v=fgx3NMk6F54
+- https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+- https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/#debian
+- https://pve.proxmox.com/wiki/Package_Repositories#sysadmin_no_subscription_repo

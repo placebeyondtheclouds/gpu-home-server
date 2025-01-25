@@ -182,7 +182,10 @@ This hardware can run any commonly used x86 operating system, baremetal or virtu
       - CPU - advanced pm tuning -> energy perf bias ->
         - energy performance tuning - enable
         - workload -> balanced
-    - PCH configuration -> disable sSATA and SATA controllers
+    - PCH configuration ->
+      - PCH sSATA configuration -> sSATA controller -> disable
+      - PCH SATA configuration -> SATA controller -> disable
+      - PCH devices -> restore AC after power loss -> power on
 
 - install the P40
 - disconnect fan cable from the GT730, it's noisy and the GPU is not overheating without it at idle

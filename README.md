@@ -365,7 +365,27 @@ reboot
 
   - Options -> Features -> keyctl=1,nesting=1 (this is [required](https://pve.proxmox.com/wiki/Linux_Container) for running docker in LXC)
 
-- add GPU to the config, run `ls -al /dev/nv* | grep -v nvme` edit `nano /etc/pve/lxc/100.conf` according to the output:
+- add GPU to the config, run `ls -al /dev/nv* | grep -v nvme`. the output on my system is like this:
+
+```
+root@pve:~# ls -al /dev/nv* | grep -v nvme
+crw-rw-rw- 1 root root 195,   0 Jan 26 08:03 /dev/nvidia0
+crw-rw-rw- 1 root root 195, 255 Jan 26 08:03 /dev/nvidiactl
+crw-rw-rw- 1 root root 195, 254 Jan 26 08:03 /dev/nvidia-modeset
+crw-rw-rw- 1 root root 235,   0 Jan 26 08:03 /dev/nvidia-uvm
+crw-rw-rw- 1 root root 235,   1 Jan 26 08:03 /dev/nvidia-uvm-tools
+crw------- 1 root root  10, 144 Jan 26 08:03 /dev/nvram
+
+/dev/nvidia-caps:
+total 0
+drw-rw-rw-  2 root root     80 Jan 26 08:03 .
+drwxr-xr-x 23 root root   4760 Jan 26 08:03 ..
+cr--------  1 root root 238, 1 Jan 26 08:03 nvidia-cap1
+cr--r--r--  1 root root 238, 2 Jan 26 08:03 nvidia-cap2
+root@pve:~#
+```
+
+then edit `nano /etc/pve/lxc/100.conf` according to the output:
 
 ```
 lxc.cgroup2.devices.allow: c 195:0 rw
@@ -381,6 +401,8 @@ lxc.mount.entry: /dev/nvidia-uvm dev/nvidia-uvm none bind,optional,create=file
 lxc.mount.entry: /dev/nvidia-uvm-tools dev/nvidia-uvm-tools none bind,optional,create=file
 lxc.mount.entry: /dev/nvram dev/nvram none bind,optional,create=file
 ```
+
+the major and minor device numbers **might change after host system software or nvidia driver upgrade**, must edit the configs accordingly.
 
 start the LXC, the following commands are to be executed inside the LXC
 

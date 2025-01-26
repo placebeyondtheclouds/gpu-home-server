@@ -331,18 +331,23 @@ the output of `lspci` should say `LnkSta: Speed 8GT/s, Width x16` under load and
 
 #### install NVIDIA drivers for the P40
 
-`nvidia-smi` binary has been moved to `nvidia-cuda-driver` package (https://forums.developer.nvidia.com/t/nvidia-smi-missing-for-565-drivers-debian-12-packages/311702/5)
-
-Must lock to a certain driver version on the host and in the LXC. The headers must be installed before the driver. `pve-headers` is deprecated.
+install the kernel headers first, then the drivers. the headers are needed to compile kernel modules of the nvidia drivers and other drivers that might be installed in the future. `pve-headers` is deprecated circa 2023.
 
 ```bash
 apt install proxmox-headers-$(uname -r)
+```
+
+`nvidia-smi` binary has been moved to `nvidia-cuda-driver` package since version 565 (https://forums.developer.nvidia.com/t/nvidia-smi-missing-for-565-drivers-debian-12-packages/311702/5)
+
+Must install the same driver version on the host and in the LXC. The headers must be installed before the driver. The container will use kernel modules loaded on the host, LXC needs to install the drivers only because it needs the libraries and other binaries.
+
+```bash
 curl -fSsL https://developer.download.nvidia.com/compute/cuda/repos/debian12/x86_64/3bf863cc.pub | gpg --dearmor | tee /usr/share/keyrings/nvidia-drivers.gpg > /dev/null 2>&1
 apt update
 apt install dirmngr ca-certificates software-properties-common apt-transport-https dkms -y
 echo 'deb [signed-by=/usr/share/keyrings/nvidia-drivers.gpg] https://developer.download.nvidia.com/compute/cuda/repos/debian12/x86_64/ /' | tee /etc/apt/sources.list.d/nvidia-drivers.list
 apt update
-apt install cuda-drivers-565 nvtop -y
+apt install cuda-drivers nvtop -y
 apt list --installed | grep nvidia
 reboot
 ```
@@ -351,10 +356,6 @@ reboot
   - should see `Kernel driver in use: nvidia`
 - `nvidia-smi -i 0 -q | grep -Ei "driver|product|bus|link|max|current|performance"`
 - `nvidia-smi -q -i 0 -d CLOCK`
-
-#### check the GPU stability under load
-
-- `nvidia-smi -q -i 0 -d PERFORMANCE` must have event reasons `Not Active`
 
 ## LXCs
 
@@ -443,12 +444,10 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-sudo usermod -aG docker $USER
+sudo usermod -aG docker $USER && newgrp docker
 ```
 
 - set up proxy settings for docker (if needed)
-
-- `logout`
 
 - install nvidia-container-toolkit
 
@@ -467,6 +466,10 @@ systemctl restart docker
 
 > [!WARNING]
 > work in progress
+
+### check the GPU stability [under load](https://github.com/placebeyondtheclouds/my-homelab-services-docker-stack?tab=readme-ov-file#hashcat)
+
+- `nvidia-smi -q -i 0 -d PERFORMANCE` must have event reasons `Not Active`
 
 ### Debian LXC for homelab network services
 

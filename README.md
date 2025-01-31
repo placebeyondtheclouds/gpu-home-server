@@ -24,10 +24,8 @@ These are my notes and not a refined guide. They are the build process walkthrou
 ## to do
 
 - [ ] mitigate https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-3646
-- [ ] reflash the BIOS with coreboot to remove the possibility of bootkits
 - [ ] ARGB daemon (https://github.com/CalcProgrammer1/OpenRGB)
 - [x] wifi client
-- [ ] rootless docker
 
 ## hardware
 

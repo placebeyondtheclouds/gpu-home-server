@@ -447,7 +447,7 @@ apt update && apt upgrade -y
 
 the following commands are to be executed inside the LXC.
 
-- increase sshd rate limiting thresholds, otherwise docker would fail to deploy stacks with large number of containers. Docker opens multiple ssh connections to remote server when used with DOCKER_HOST (or context), and it will hit the default rate limit of 10 connections when deploying a large docker-compose file.
+- increase sshd rate limiting thresholds, otherwise [docker would fail to deploy stacks with large number of containers](https://forums.docker.com/t/docker-compose-through-ssh-failing-and-referring-to-docker-example-com/115165/18). Docker opens multiple ssh connections to remote server when used with DOCKER_HOST (or context), and it will hit the default rate limit of 10 connections when deploying a large docker-compose file.
 
 ```bash
 sudo sed -i 's/#MaxStartups 10:30:100/MaxStartups 100:30:100/' /etc/ssh/sshd_config

@@ -447,6 +447,13 @@ apt update && apt upgrade -y
 
 the following commands are to be executed inside the LXC.
 
+- increase sshd rate limiting thresholds, otherwise docker would fail to deploy stacks with large number of containers. Docker opens multiple ssh connections to remote server when used with DOCKER_HOST (or context), and it will hit the default rate limit of 10 connections when deploying a large docker-compose file.
+
+```bash
+sudo sed -i 's/#MaxStartups 10:30:100/MaxStartups 100:30:100/' /etc/ssh/sshd_config
+sudo systemctl restart ssh sshd
+```
+
 - install docker engine. this is a basic setup and must be adjusted according to the actual needs:
 
 ```
@@ -644,3 +651,4 @@ Under the VM settings, go to Hardware -> Display Adapter = "none".
 - https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
 - https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/#debian
 - https://pve.proxmox.com/wiki/Package_Repositories#sysadmin_no_subscription_repo
+- https://forums.docker.com/t/docker-compose-through-ssh-failing-and-referring-to-docker-example-com/115165/18

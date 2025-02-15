@@ -1,4 +1,4 @@
-# Minimalistic GPU homelab server for AI/ML
+# Minimalistic GPU homelab server for AI/ML (2025 update)
 
 These are my notes and not a refined guide. They are the build process walkthrough and also minimal instructions for the process that I usually follow to get a server up and running, and must be adjusted according to the actual needs.
 
@@ -56,9 +56,9 @@ Total cost: 3800 元
 
 This hardware can run any commonly used x86 operating system, baremetal or virtualized. I chose to go with my usual stack:
 
-- Proxmox VE 8.3.2, kernel 6.8.12-6-pve
-- NVIDIA drivers 565.57.01
-- NVIDIA container toolkit 1.17.3-1
+- **Proxmox VE** `8.3.3`, kernel `6.8.12-8-pve` (2025-01-24T12:32Z)
+- **NVIDIA driver** `570.86.15`
+- **NVIDIA container toolkit** `1.17.4-1`
 - OpenWRT, VM
   - WiFi client
 - OPNsense, VM
@@ -352,8 +352,24 @@ reboot
 
 - `lspci -nnk | grep -i nvidia`
   - should see `Kernel driver in use: nvidia`
+
+#### (optional) overclock GPU core from 1303 to 1531 MHz at idle
+
 - `nvidia-smi -i 0 -q | grep -Ei "driver|product|bus|link|max|current|performance"`
 - `nvidia-smi -q -i 0 -d CLOCK`
+
+gives me current core clock of 1303 MHz and max core clock of 1531 MHz, memory already at max 3615 MHz
+
+set the core clock to the max, leave the memory clock as is:
+
+```bash
+nvidia-smi -q -i 0 -d SUPPORTED_CLOCKS
+nvidia-smi -pm ENABLED -i 0
+nvidia-smi -ac 3615,1531 -i 0
+nvidia-smi -q -i 0 -d CLOCK
+```
+
+now shows 1531 MHz for the core clock. this is not persistent between reboots. reset to default with `nvidia-smi  -rac -i 0`
 
 ## LXCs
 

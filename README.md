@@ -668,3 +668,4 @@ Under the VM settings, go to Hardware -> Display Adapter = "none".
 - https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/#debian
 - https://pve.proxmox.com/wiki/Package_Repositories#sysadmin_no_subscription_repo
 - https://forums.docker.com/t/docker-compose-through-ssh-failing-and-referring-to-docker-example-com/115165/18
+- https://github.com/JingShing/How-to-use-tesla-p40

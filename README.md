@@ -30,7 +30,15 @@ These are my notes and not a refined guide. They are the build process walkthrou
 ## hardware
 
 - **NVIDIA TESLA P40**, PCIe 3.0 x16, TDP 250 W - 1649 元 **used**
-  - supports the latest driver version (565 at the moment)
+
+  - pros:
+    - suppored by the latest driver (version 570 at the moment) and the latest CUDA 12
+    - 24GB VRAM
+  - cons:
+    - no Tensor Cores (slower FP16 performance in comparison to Volta and newer architectures)
+    - no video outputs
+    - needs custom cooling solution
+
 - 2x PCIe 8pin to 1x **EPS 8pin adapter** 18AWG - was included with the GPU
   - might be an overkill as I could just use the spare 8pin CPU power cable from the PSU, but better make use of the two PCIe power cables
 - custom made **长城战龙 240mm ARGB**-based waterblock solution for GPU - 459 元
@@ -72,7 +80,7 @@ This hardware can run any commonly used x86 operating system, baremetal or virtu
   - conda, jupyter lab
 - Debian 12, LXC for home network tools
   - [my homelab services docker stack](https://github.com/placebeyondtheclouds/my-homelab-services-docker-stack):
-    - [Homepage](https://github.com/gethomepage/homepage)
+    - Homepage
     - hashcat
     - jellyfin
     - Juice server (GPU-over-IP)
@@ -669,3 +677,5 @@ Under the VM settings, go to Hardware -> Display Adapter = "none".
 - https://pve.proxmox.com/wiki/Package_Repositories#sysadmin_no_subscription_repo
 - https://forums.docker.com/t/docker-compose-through-ssh-failing-and-referring-to-docker-example-com/115165/18
 - https://github.com/JingShing/How-to-use-tesla-p40
+- https://wolfadvancedtechnology.com/nvidia-gpu-architecture/
+- https://www.digitalocean.com/community/tutorials/understanding-tensor-cores

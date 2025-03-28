@@ -30,7 +30,6 @@ These are my notes and not a refined guide. They are the build process walkthrou
 ## hardware
 
 - **NVIDIA TESLA P40**, PCIe 3.0 x16, TDP 250 W - 1649 元 **used**
-
   - pros:
     - suppored by the latest driver (version 570 at the moment) and the latest CUDA 12
     - 24GB VRAM
@@ -38,7 +37,6 @@ These are my notes and not a refined guide. They are the build process walkthrou
     - no Tensor Cores (slower FP16 performance in comparison to Volta and newer architectures)
     - no video outputs
     - needs custom cooling solution
-
 - 2x PCIe 8pin to 1x **EPS 8pin adapter** 18AWG - was included with the GPU
   - might be an overkill as I could just use the spare 8pin CPU power cable from the PSU, but better make use of the two PCIe power cables
 - custom made **长城战龙 240mm ARGB**-based waterblock solution for GPU - 459 元

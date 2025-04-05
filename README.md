@@ -389,19 +389,19 @@ now shows 1531 MHz for the core clock. this is not persistent between reboots. r
 
 ```
 root@pve:~# ls -al /dev/nv* | grep -v nvme
-crw-rw-rw- 1 root root 195,   0 Jan 26 08:03 /dev/nvidia0
-crw-rw-rw- 1 root root 195, 255 Jan 26 08:03 /dev/nvidiactl
-crw-rw-rw- 1 root root 195, 254 Jan 26 08:03 /dev/nvidia-modeset
-crw-rw-rw- 1 root root 235,   0 Jan 26 08:03 /dev/nvidia-uvm
-crw-rw-rw- 1 root root 235,   1 Jan 26 08:03 /dev/nvidia-uvm-tools
-crw------- 1 root root  10, 144 Jan 26 08:03 /dev/nvram
+crw-rw-rw- 1 root root 195,   0 Apr  5 09:40 /dev/nvidia0
+crw-rw-rw- 1 root root 195, 255 Apr  5 09:40 /dev/nvidiactl
+crw-rw-rw- 1 root root 195, 254 Apr  5 09:40 /dev/nvidia-modeset
+crw-rw-rw- 1 root root 235,   0 Apr  5 09:40 /dev/nvidia-uvm
+crw-rw-rw- 1 root root 235,   1 Apr  5 09:40 /dev/nvidia-uvm-tools
+crw------- 1 root root  10, 144 Apr  5 09:40 /dev/nvram
 
 /dev/nvidia-caps:
 total 0
-drw-rw-rw-  2 root root     80 Jan 26 08:03 .
-drwxr-xr-x 23 root root   4760 Jan 26 08:03 ..
-cr--------  1 root root 238, 1 Jan 26 08:03 nvidia-cap1
-cr--r--r--  1 root root 238, 2 Jan 26 08:03 nvidia-cap2
+drw-rw-rw-  2 root root     80 Apr  5 09:40 .
+drwxr-xr-x 23 root root   4740 Apr  5 15:33 ..
+cr--------  1 root root 238, 1 Apr  5 09:40 nvidia-cap1
+cr--r--r--  1 root root 238, 2 Apr  5 09:40 nvidia-cap2
 root@pve:~#
 ```
 
@@ -411,18 +411,22 @@ then edit `nano /etc/pve/lxc/100.conf` according to the output:
 lxc.cgroup2.devices.allow: c 195:0 rw
 lxc.cgroup2.devices.allow: c 195:255 rw
 lxc.cgroup2.devices.allow: c 195:254 rw
-lxc.cgroup2.devices.allow: c 234:0 rw
-lxc.cgroup2.devices.allow: c 234:1 rw
+lxc.cgroup2.devices.allow: c 235:0 rw
+lxc.cgroup2.devices.allow: c 235:1 rw
 lxc.cgroup2.devices.allow: c 10:144 rw
+lxc.cgroup2.devices.allow: c 238:1 rw
+lxc.cgroup2.devices.allow: c 238:2 rw
 lxc.mount.entry: /dev/nvidia0 dev/nvidia0 none bind,optional,create=file
 lxc.mount.entry: /dev/nvidiactl dev/nvidiactl none bind,optional,create=file
 lxc.mount.entry: /dev/nvidia-modeset dev/nvidia-modeset none bind,optional,create=file
 lxc.mount.entry: /dev/nvidia-uvm dev/nvidia-uvm none bind,optional,create=file
 lxc.mount.entry: /dev/nvidia-uvm-tools dev/nvidia-uvm-tools none bind,optional,create=file
 lxc.mount.entry: /dev/nvram dev/nvram none bind,optional,create=file
+lxc.mount.entry: /dev/nvidia-caps/nvidia-cap1 dev/nvidia-caps/nvidia-cap1 none bind,optional,create=file
+lxc.mount.entry: /dev/nvidia-caps/nvidia-cap2 dev/nvidia-caps/nvidia-cap2 none bind,optional,create=file
 ```
 
-the major and minor device numbers **might change after host system software or nvidia driver upgrade**, must edit the configs accordingly.
+The major and minor device numbers **might change after host system software or nvidia driver upgrade**, must edit the configs accordingly. `rw` is sufficient for GPU access.
 
 start the LXC, the following commands are to be executed inside the LXC
 
@@ -677,3 +681,5 @@ Under the VM settings, go to Hardware -> Display Adapter = "none".
 - https://github.com/JingShing/How-to-use-tesla-p40
 - https://wolfadvancedtechnology.com/nvidia-gpu-architecture/
 - https://www.digitalocean.com/community/tutorials/understanding-tensor-cores
+- https://digitalspaceport.com/proxmox-lxc-gpu-passthru-setup-guide/
+- https://blog.konpat.me/dev/2019/03/11/setting-up-lxc-for-intel-gpu-proxmox.html

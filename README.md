@@ -341,19 +341,36 @@ install the kernel headers first, then the drivers. the headers are needed to co
 apt install proxmox-headers-$(uname -r)
 ```
 
-`nvidia-smi` binary has been moved to `nvidia-cuda-driver` package since version 565 (https://forums.developer.nvidia.com/t/nvidia-smi-missing-for-565-drivers-debian-12-packages/311702/5)
-
-Must install the same driver version on the host and in the LXC. The headers must be installed before the driver. The container will use kernel modules loaded on the host, LXC needs to install the drivers only because it needs the libraries and other binaries.
+do not, and I repeat **do not** install the drivers from the apt repository, unless you want to update the driver in all of the containers on the machine and also on the hypervisor _every time_ you need to add another LXC. the repository does not contain older versions of the driver, and the driver version must be the same across all the containers and the hypervisor. use the installer file instead:
 
 ```bash
-curl -fSsL https://developer.download.nvidia.com/compute/cuda/repos/debian12/x86_64/3bf863cc.pub | gpg --dearmor | tee /usr/share/keyrings/nvidia-drivers.gpg > /dev/null 2>&1
-apt update
-apt install dirmngr ca-certificates software-properties-common apt-transport-https dkms -y
-echo 'deb [signed-by=/usr/share/keyrings/nvidia-drivers.gpg] https://developer.download.nvidia.com/compute/cuda/repos/debian12/x86_64/ /' | tee /etc/apt/sources.list.d/nvidia-drivers.list
-apt update
-apt install cuda-drivers nvtop -y
-apt list --installed | grep nvidia
-reboot
+apt install -y dkms wget
+wget https://download.nvidia.com/XFree86/Linux-x86_64/570.86.16/NVIDIA-Linux-x86_64-570.86.16.run
+chmod +x NVIDIA-Linux-x86_64-570.86.16.run
+./NVIDIA-Linux-x86_64-570.86.16.run
+```
+
+uninstall (if needed) with:
+
+```bash
+/usr/bin/nvidia-uninstall
+```
+
+~~- driver installation method using the repository:~~
+
+~~`nvidia-smi` binary has been moved to `nvidia-cuda-driver` package since version 565 (https://forums.developer.nvidia.com/t/nvidia-smi-missing-for-565-drivers-debian-12-packages/311702/5)~~
+
+~~Must install the same driver version on the host and in the LXC. The headers must be installed before the driver. The container will use kernel modules loaded on the host, LXC needs to install the drivers only because it needs the libraries and other binaries.~~
+
+```bash
+#curl -fSsL https://developer.download.nvidia.com/compute/cuda/repos/debian12/x86_64/3bf863cc.pub | gpg --dearmor | tee /usr/share/keyrings/nvidia-drivers.gpg > /dev/null 2>&1
+#apt update
+#apt install dirmngr ca-certificates software-properties-common apt-transport-https dkms -y
+#echo 'deb [signed-by=/usr/share/keyrings/nvidia-drivers.gpg] https://developer.download.nvidia.com/compute/cuda/repos/debian12/x86_64/ /' | tee /etc/apt/sources.list.d/nvidia-drivers.list
+#apt update
+#apt install cuda-drivers nvtop -y
+#apt list --installed | grep nvidia
+#reboot
 ```
 
 - `lspci -nnk | grep -i nvidia`
@@ -467,7 +484,11 @@ apt update && apt upgrade -y
 
 - `apt install screen curl gpg rsync -y`
 
-- install NVIDIA drivers, same commands as for the host minus the `proxmox-headers-$(uname -r)` package
+- install NVIDIA drivers, same commands as for the host minus the `proxmox-headers-$(uname -r)` package, and the driver installer file must be run like this:
+
+```bash
+./NVIDIA-Linux-x86_64-570.86.16.run  --no-kernel-module
+```
 
 ### continue setting up the Debian LXC with GPU-enabled docker
 

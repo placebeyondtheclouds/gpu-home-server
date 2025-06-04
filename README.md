@@ -345,9 +345,9 @@ do not, and I repeat **do not** install the drivers from the apt repository, unl
 
 ```bash
 apt install -y dkms wget
-wget https://download.nvidia.com/XFree86/Linux-x86_64/570.86.16/NVIDIA-Linux-x86_64-570.86.16.run
-chmod +x NVIDIA-Linux-x86_64-570.86.16.run
-./NVIDIA-Linux-x86_64-570.86.16.run
+wget https://download.nvidia.com/XFree86/Linux-x86_64/575.57.08/NVIDIA-Linux-x86_64-575.57.08.run
+chmod +x NVIDIA-Linux-x86_64-575.57.08.run
+./NVIDIA-Linux-x86_64-575.57.08.run
 ```
 
 uninstall (if needed) with:
@@ -487,8 +487,10 @@ apt update && apt upgrade -y
 - install NVIDIA drivers, same commands as for the host minus the `proxmox-headers-$(uname -r)` package, and the driver installer file must be run like this:
 
 ```bash
-./NVIDIA-Linux-x86_64-570.86.16.run  --no-kernel-module
+./NVIDIA-Linux-x86_64-575.57.08.run --no-kernel-module
 ```
+
+`Enter` through the prompts.
 
 ### continue setting up the Debian LXC with GPU-enabled docker
 
@@ -523,10 +525,20 @@ sudo usermod -aG docker $USER && newgrp docker
 
 - set up proxy settings for docker (if needed)
 
+- add NVIDIA repository (to install the nvidia-container-toolkit)
+
+```bash
+curl -fSsL https://developer.download.nvidia.com/compute/cuda/repos/debian12/x86_64/3bf863cc.pub | gpg --dearmor | tee /usr/share/keyrings/nvidia-drivers.gpg > /dev/null 2>&1
+apt update
+apt install dirmngr ca-certificates software-properties-common apt-transport-https dkms -y
+echo 'deb [signed-by=/usr/share/keyrings/nvidia-drivers.gpg] https://developer.download.nvidia.com/compute/cuda/repos/debian12/x86_64/ /' | tee /etc/apt/sources.list.d/nvidia-drivers.list
+apt update
+```
+
 - install nvidia-container-toolkit
 
 ```bash
-apt install nvidia-container-toolkit
+apt install nvidia-container-toolkit -y
 sed -i 's/#no-cgroups = false/no-cgroups = true/' /etc/nvidia-container-runtime/config.toml
 nvidia-ctk runtime configure --runtime=docker
 systemctl restart docker
@@ -535,6 +547,8 @@ systemctl restart docker
 - check with `nvidia-container-cli -k -d /dev/tty info`
 
 - test with `docker info | grep -i runtime` and `docker run --rm --runtime=nvidia --gpus all ubuntu nvidia-smi`
+
+- benchmark the GPU with `docker run --rm -it --gpus=all nvcr.io/nvidia/k8s/cuda-sample:nbody nbody -gpu -benchmark`
 
 - add ssh key and deploy my GPU webserver docker stack using DOCKER_HOST
 

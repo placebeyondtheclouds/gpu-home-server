@@ -301,6 +301,25 @@ EOF
 
 `shutdown -r now`
 
+#### pin the kernel version
+
+if it's not pinned it would break the NVIDIA driver after the kernel update.
+
+```bash
+uname -r
+proxmox-boot-tool kernel list
+proxmox-boot-tool kernel pin 6.8.12-8-pve  --next-boot
+proxmox-boot-tool refresh
+```
+
+`reboot` and verify that the kernel is working. then pin the kernel version permanently:
+
+```bash
+uname -r
+proxmox-boot-tool kernel pin 6.8.12-8-pve
+proxmox-boot-tool refresh
+```
+
 #### tune power consumption
 
 - `apt install powertop`
@@ -339,6 +358,7 @@ install the kernel headers first, then the drivers. the headers are needed to co
 
 ```bash
 apt install proxmox-headers-$(uname -r)
+apt-mark hold proxmox-headers-$(uname -r)
 ```
 
 do not, and I repeat **do not** install the drivers from the apt repository, unless you want to update the driver in all of the containers on the machine and also on the hypervisor _every time_ you need to add another LXC. the repository does not contain older versions of the driver, and the driver version must be the same across all the containers and the hypervisor. use the installer file instead:
@@ -481,6 +501,8 @@ apt update && apt upgrade -y
 - `apt install ifupdown2 -y` fixes 5 minute hang after LXC start
 
 - `apt install linux-headers-amd64 -y`
+
+- ` apt-mark hold linux-headers-amd64`
 
 - `apt install screen curl gpg rsync -y`
 

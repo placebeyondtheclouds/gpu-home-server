@@ -698,7 +698,7 @@ Under the VM settings, go to Hardware -> Display Adapter = "none".
 
 ## 感谢
 
-感谢可可给我借一个很好用的键盘
+感谢可可借给我一个很好用的键盘
 
 ## references
 

@@ -635,9 +635,9 @@ pct set 105 -mp0 /mnt/training,mp=/mnt/training
 - change boot order
 - add usb wifi dongle
 
-boot. ssh into it, user `root`, password is blank.
+start the vm. ssh into it, user `root`, password is blank.
 
-add eth nic to connect to the internet temporarily, configure opkg feed links to the servers(mirror-03.infra.openwrt.org or downloads.openwrt.org or thatever that is working), install the packages for the wifi (`kmod-iwlwifi` and `iwlwifi-firmware-ax200` for AX200) and `wpa-supplicant-openssl` (for WPA3), reboot, connect to the wifi
+add eth nic to connect to the internet temporarily, configure opkg feed links to the servers(mirror-03.infra.openwrt.org or downloads.openwrt.org or whatever that is working), install the packages for the wifi (`kmod-iwlwifi` and `iwlwifi-firmware-ax200` for AX200) and `wpa-supplicant-openssl` (for WPA3), reboot, connect to the wifi
 
 continue expanding root filesystem
 

@@ -201,7 +201,7 @@ This hardware can run any commonly used x86 operating system, baremetal or virtu
 
 ### hypervisor
 
-- boot Proxmox VE 8.3 live cd, hit `e` and add `nomodeset` to the kernel command line, `ctrl` + `x` to boot (because GT730 is too old for the drivers in proxmox). I used my [hardware CD-ROM emulator](https://github.com/placebeyondtheclouds/rpi-cdrom-emulator-build) to boot from the [ISO](https://enterprise.proxmox.com/iso/proxmox-ve_8.3-1.iso)
+- boot Proxmox VE 8.3 live cd, hit `e` and add `nomodeset` to the kernel command line, `ctrl` + `x` to boot (because GT730 is too old for the drivers in proxmox). I used my [hardware CD-ROM emulator](https://github.com/placebeyondtheclouds/rpi-cdrom-emulator-build) to boot from the [ISO](https://enterprise.proxmox.com/iso/proxmox-ve_8.3-1.iso). complete the installation and boot into proxmox.
 
 #### set up virtualization (IOMMU and VFIO), blacklist default drivers
 
@@ -303,7 +303,7 @@ EOF
 
 #### pin the kernel version
 
-if it's not pinned it would break the NVIDIA driver after the kernel update.
+if it's not pinned, NVIDIA driver kernel module would break after the kernel update.
 
 ```bash
 uname -r
@@ -324,11 +324,13 @@ proxmox-boot-tool refresh
 
 - `apt install powertop`
 
-put into `crontab -e`:
+switch to powersave mode at startup:
 
 ```bash
+tee -a /var/spool/cron/crontabs/root <<-'EOF'
 @reboot /usr/sbin/powertop --auto-tune
 @reboot /bin/echo powersave | /usr/bin/tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+EOF
 ```
 
 after reboot check with:

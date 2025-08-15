@@ -64,7 +64,7 @@ This hardware can run any commonly used x86 operating system, baremetal or virtu
 
 - **Proxmox VE** `8.3.3`, kernel `6.8.12-8-pve` (2025-01-24T12:32Z)
 - **NVIDIA driver** `570.86.15`
-- **NVIDIA container toolkit** `1.17.4-1`
+- **NVIDIA container toolkit** `1.17.4-1` - must upgrade to `1.17.8` or later to mitigate CVE-2025-23266 and CVE-2025-23267
 - OpenWRT, VM
   - WiFi client
 - OPNsense, VM

@@ -547,6 +547,18 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 sudo usermod -aG docker $USER && newgrp docker
 ```
 
+- set network subnets for docker to use. the default /16 is too large, when it gets exhaused docker will start to allocate 192.168. pool which might conflict with home network. `nano /etc/docker/daemon.json` and insert the following before the last curly bracket:
+
+```
+,
+  "default-address-pools": [
+    {
+      "base" : "172.16.0.0/12",
+      "size" : 24
+    }
+  ]
+```
+
 - set up proxy settings for docker (if needed)
 
 - add NVIDIA repository (to install the nvidia-container-toolkit)

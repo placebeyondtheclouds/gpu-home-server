@@ -171,7 +171,6 @@ This hardware can run any commonly used x86 operating system, baremetal or virtu
 - CPU waterblock fan connected to the CFAN1 PWM fan header (FAN1 in BIOS), GPU waterblock fan connected to the SFAN1 PWM header (FAN2 in BIOS)
 
 - set up BIOS
-
   - advanced -> smart fan function -> set both PWM1 to 100
   - PCI subsystem settings ->
     - Enable above 4G decoding (otherwise will be faced with `Insufficient PCI resources detected`)
@@ -206,7 +205,6 @@ This hardware can run any commonly used x86 operating system, baremetal or virtu
 #### set up virtualization (IOMMU and VFIO), blacklist default drivers
 
 - `nano /etc/default/grub` replace the value with:
-
   - ```
     GRUB_CMDLINE_LINUX_DEFAULT="intel_iommu=on iommu=pt nomodeset"
 
@@ -244,7 +242,6 @@ This is for using NVIDIA driver for P40 on the host with LXCs. To change this co
 - `update-initramfs -u && update-grub && proxmox-boot-tool refresh && reboot`
 
 - `dmesg | grep -e DMAR -e IOMMU`
-
   - should see `DMAR: Intel(R) Virtualization Technology for Directed I/O`
 
 #### set up updates
@@ -421,7 +418,6 @@ now shows 1531 MHz for the core clock. this is not persistent between reboots. r
 ### common setup for all LXCs
 
 - download Debian-12 template and create unprivileged LXC with Debian 12.
-
   - Options -> Features -> keyctl=1,nesting=1 (this is [required](https://pve.proxmox.com/wiki/Linux_Container) for running docker in LXC)
 
 - add GPU to the config, run `ls -al /dev/nv* | grep -v nvme`. the output on my system is like this:
@@ -709,6 +705,11 @@ Under the VM settings, go to Hardware -> Display Adapter = "none".
 - should've put less thermal paste on the CPU
 - can't add a second GPU, the motherboard has only one PCIe x16 slot and the case is too small for a second waterblock to be put inside
 - there are other motherboards, for instance, 云星 C612plus for 500 元, which has two PCIe x16 slots with two slot-spaces between them, which would allow to fit 2 GPUs in a slightly larger case, and it has the onboard video! But that would not be a minimalistic build anymore, since it would require a larger ATX case to fit the additional waterblock and the GPU.
+- so a **better configuration** would be:
+  - two Tesla V100 32GB
+  - E-ATX C612 motherboard with two CPU sockets and two PCIe
+  - two E5-2660v4
+  - large tower case
 
 ## 感谢
 

@@ -1,6 +1,6 @@
 # Minimalistic GPU homelab server for AI/ML (2025 update)
 
-These are my notes and not a refined guide. They are the build process walkthrough and also minimal instructions for the process that I usually follow to get a server up and running, and must be adjusted according to the actual needs.
+These are my notes that I took during the build process. They are the build process walkthrough and also minimal instructions for the process that I usually follow to get a new server up and running, and must be adjusted according to the actual needs.
 
 ## end result
 
@@ -298,6 +298,17 @@ EOF
 
 `shutdown -r now`
 
+#### tuning
+
+- adjust settings to use less swap (can be done in LXCs as well)
+
+```bash
+tee -a /etc/rc.local <<-'EOF'
+echo 1 > /proc/sys/vm/swappiness
+echo 160 > /proc/sys/vm/vfs_cache_pressure
+EOF
+```
+
 #### pin the kernel version
 
 if it's not pinned, NVIDIA driver kernel module would break after the kernel update.
@@ -515,6 +526,15 @@ apt update && apt upgrade -y
 ### continue setting up the Debian LXC with GPU-enabled docker
 
 the following commands are to be executed inside the LXC.
+
+- optional, but might come in handy. In case if a process inside LXC woild have a memory leak (or an untested python script reads terabytes of data into RAM), if RAM size for the container is not overprovisioned, with the default cgroup memory settings (_max_) the kernel would throttle the process memory allocation when free RAM will drop down to the value in `/proc/sys/vm/min_free_kbytes` (100MB by default) and the system will enter the swap storm which would make the system unresponsive. If the container RAM is overprovisioned, then the hypervisor will become unresponsive as well. It is possible to protect from this to some degree by installing `earlyoom` which would kill a process(es) based on its _oom score_ when free RAM is down to 10% (default).
+
+```bash
+sudo apt install earlyoom
+sudo systemctl enable --now earlyoom
+```
+
+to test it, run `tail /dev/zero` and observe with `earlyoom`. can check the logs with `sudo journalctl -u earlyoom | grep sending`
 
 - increase sshd rate limiting thresholds, otherwise [docker would fail to deploy stacks with large number of containers](https://forums.docker.com/t/docker-compose-through-ssh-failing-and-referring-to-docker-example-com/115165/18). Docker opens multiple ssh connections to remote server when used with DOCKER_HOST (or context), and it will hit the default rate limit of 10 connections when deploying a large docker-compose file.
 

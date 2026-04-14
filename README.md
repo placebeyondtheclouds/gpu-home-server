@@ -726,10 +726,13 @@ Under the VM settings, go to Hardware -> Display Adapter = "none".
 - can't add a second GPU, the motherboard has only one PCIe x16 slot and the case is too small for a second waterblock to be put inside
 - there are other motherboards, for instance, 云星 C612plus for 500 元, which has two PCIe x16 slots with two slot-spaces between them, which would allow to fit 2 GPUs in a slightly larger case, and it has the onboard video! But that would not be a minimalistic build anymore, since it would require a larger ATX case to fit the additional waterblock and the GPU.
 - so a **better configuration** would be:
-  - two Tesla V100 32GB
+  - two original pcie Tesla V100 32GB with added fans
   - E-ATX C612 motherboard with two CPU sockets and two PCIe
   - two E5-2660v4
   - large tower case
+
+- **another** great GPU upgrade would be using NVIDIA tesla V100 SXM2 32GB module installed into a SXM2-to-PCIe adapter with a 2-slot heatsink and a turbine fan
+- an **even better** configuration for the host system would be 华南智 H12D-8D motherboard (SFF8643, 2.5GBE, USB3.2 gen1, AST2500 BMC, 4 pcie gen4 x16 sockets spaced for 2-slot cards) with AMD EPYC 7K62 (128 PCIe lanes)
 
 ## 感谢
 
